@@ -122,68 +122,12 @@ public class DiseaseScoresActivity extends AppCompatActivity implements SeekBar.
 
             // enable scaling and dragging
             chart.setDragEnabled(true);
-            chart.setScaleEnabled(true);
+//            chart.setScaleEnabled(true);
             // chart.setScaleXEnabled(true);
             // chart.setScaleYEnabled(true);
 
             // force pinch zoom along both axis
             chart.setPinchZoom(true);
-        }
-
-        XAxis xAxis;
-        {   // // X-Axis Style // //
-            xAxis = chart.getXAxis();
-
-            // vertical grid lines
-            xAxis.enableGridDashedLine(10f, 10f, 0f);
-        }
-
-        YAxis yAxis;
-        {   // // Y-Axis Style // //
-            yAxis = chart.getAxisLeft();
-
-            // disable dual axis (only use LEFT axis)
-            chart.getAxisRight().setEnabled(false);
-
-            // horizontal grid lines
-            yAxis.enableGridDashedLine(10f, 10f, 0f);
-
-            // axis range
-            yAxis.setAxisMaximum(200f);
-            yAxis.setAxisMinimum(-50f);
-        }
-
-
-        {   // // Create Limit Lines // //
-            LimitLine llXAxis = new LimitLine(9f, "Index 10");
-            llXAxis.setLineWidth(4f);
-            llXAxis.enableDashedLine(10f, 10f, 0f);
-            llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-            llXAxis.setTextSize(10f);
-//            llXAxis.setTypeface(tfRegular);
-
-            LimitLine ll1 = new LimitLine(150f, "Upper Limit");
-            ll1.setLineWidth(4f);
-            ll1.enableDashedLine(10f, 10f, 0f);
-            ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-            ll1.setTextSize(10f);
-//            ll1.setTypeface(tfRegular);
-
-            LimitLine ll2 = new LimitLine(-30f, "Lower Limit");
-            ll2.setLineWidth(4f);
-            ll2.enableDashedLine(10f, 10f, 0f);
-            ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-            ll2.setTextSize(10f);
-//            ll2.setTypeface(tfRegular);
-
-            // draw limit lines behind data instead of on top
-            yAxis.setDrawLimitLinesBehindData(true);
-            xAxis.setDrawLimitLinesBehindData(true);
-
-            // add limit lines
-            yAxis.addLimitLine(ll1);
-            yAxis.addLimitLine(ll2);
-            //xAxis.addLimitLine(llXAxis);
         }
 
         // add data
