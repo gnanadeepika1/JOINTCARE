@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.myjoints">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyJoints"
+        android:usesCleartextTraffic="true">
+
+        <!-- 🚀 Launcher Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Patient & Doctor Related Activities -->
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".PatientLoginActivity" android:exported="false" />
+        <activity android:name=".PatientSignupActivity" android:exported="false" />
+        <activity android:name=".PatientDashboardActivity" android:exported="false" />
+        <activity android:name=".DoctorLoginActivity" android:exported="false" />
+        <activity android:name=".DoctorSignupActivity" android:exported="false" />
+        <activity android:name=".DoctorHomeActivity" android:exported="false" />
+
+        <!-- App Functional Screens -->
+        <activity android:name=".ComplaintsActivity" android:exported="false" />
+        <activity android:name=".ComorbiditiesActivity" android:exported="false" />
+        <activity android:name=".DailySelfAssessmentActivity" android:exported="false" />
+        <activity android:name=".MedicationsActivity" android:exported="false" />
+        <activity android:name=".InvestigationsActivity" android:exported="false" />
+        <activity android:name=".TreatmentsActivity" android:exported="false" />
+        <activity android:name=".DietRecommendationsActivity" android:exported="false" />
+        <activity android:name=".ExerciseRecommendationsActivity" android:exported="false" />
+        <activity android:name=".ConsultNowActivity" android:exported="false" />
+
+        <!-- History Screens -->
+        <activity android:name=".MedicalRecordsActivity" android:exported="false" />
+        <activity android:name=".MedicationsHistoryActivity" android:exported="false" />
+        <activity android:name=".InvestigationHistoryActivity" android:exported="false" />
+        <activity android:name=".TreatmentsHistoryActivity" android:exported="false" />
+        <activity android:name=".ComplaintHistoryActivity" android:exported="false" />
+        <activity android:name=".DoctorComorbiditiesHistoryActivity" android:exported="false" />
+        <activity android:name=".ReferralHistoryActivity" android:exported="false" />
+
+        <!-- Disease Scores -->
+        <activity
+            android:name=".DiseaseScoresActivity"
+            android:exported="false" />
+
+        <!-- ✅ NEW: Tender Joints Screen -->
+        <activity
+            android:name=".TenderJointsActivity"
+            android:exported="false" />
+
+        <!-- Misc -->
+        <activity android:name=".MyPatientsActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
+
+    </application>
+
+</manifest>

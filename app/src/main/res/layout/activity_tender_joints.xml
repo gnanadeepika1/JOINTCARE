@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:background="#F8DFF4">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="#000000"/>
+
+        <TextView
+            android:layout_marginStart="16dp"
+            android:text="Disease Activity Score"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!-- CONTENT -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="72dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- STEPS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingBottom="12dp">
+
+                <!-- STEP 1 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/step_active_circle"/>
+
+                    <TextView
+                        android:text="Tender\nJoints"
+                        android:textAlignment="center"
+                        android:textColor="#F06292"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <!-- STEP 2 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:text="2"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/step_inactive_circle"/>
+
+                    <TextView
+                        android:text="Swollen\nJoints"
+                        android:textAlignment="center"
+                        android:textColor="#B0B0B0"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <!-- STEP 3 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:text="3"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/step_inactive_circle"/>
+
+                    <TextView
+                        android:text="Assessment"
+                        android:textAlignment="center"
+                        android:textColor="#B0B0B0"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- STEP TITLE -->
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="Step 1: Select Tender Joints"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#F06292"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- SELECTED COUNT -->
+            <TextView
+                android:id="@+id/tvSelectedCount"
+                android:layout_marginTop="8dp"
+                android:text="Selected: 0"
+                android:textSize="16sp"
+                android:textColor="#555555"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- BODY IMAGE -->
+            <androidx.cardview.widget.CardView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp">
+
+                <ImageView
+                    android:id="@+id/imgBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/tender_joints_body"
+                    android:scaleType="fitCenter"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- NEXT BUTTON -->
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Next"
+                android:enabled="false"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#F06292"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

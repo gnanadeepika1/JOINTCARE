@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_card_blue"
+    android:padding="12dp"
+    android:layout_marginBottom="12dp"
+    android:elevation="2dp"
+    android:gravity="center_vertical">
+
+    <!-- Pink round profile picture (same as doctor) -->
+    <ImageView
+        android:id="@+id/patientProfilePic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/circle_pink"
+        android:padding="10dp"
+        android:src="@drawable/ic_user_black"
+        android:scaleType="centerInside"
+        android:contentDescription="patient_avatar"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvPatientName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Patient Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#E91E63" />
+
+        <TextView
+            android:id="@+id/tvPatientEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="patient@example.com"
+            android:textSize="14sp"
+            android:textColor="#555555" />
+    </LinearLayout>
+
+</LinearLayout>
