@@ -59,6 +59,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="260dp"/>
 
+            <SeekBar
+                android:id="@+id/seekBar2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="8dp"
+                android:layout_toLeftOf="@+id/tvYMax"
+                android:layout_marginRight="5dp"
+                android:max="150"
+                android:paddingBottom="12dp" />
+
+            <SeekBar
+                android:id="@+id/seekBar1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/seekBar2"
+                android:layout_margin="8dp"
+                android:layout_marginBottom="35dp"
+                android:layout_toLeftOf="@+id/tvXMax"
+                android:layout_marginRight="5dp"
+                android:max="500"
+                android:paddingBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginTop="12dp"
+                    android:text="DAS28-CRP Score Over Time"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:id="@+id/tvXMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginTop="12dp"
+                    android:text="DAS28-CRP Score Over Time"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:id="@+id/tvYMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
             <!-- DAS -->
             <TextView
                 android:layout_marginTop="32dp"
