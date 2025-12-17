@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myjoints"
+    namespace = "com.saveetha.myjoints"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.myjoints"
+        applicationId = "com.saveetha.myjoints"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

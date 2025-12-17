@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myjoints">
+    package="com.saveetha.myjoints">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -17,43 +17,43 @@
 
         <!-- 🚀 Launcher Activity -->
         <activity
-            android:name=".MainActivity"
+            android:name="com.saveetha.myjoints.MainActivity"
             android:exported="true">
 
         </activity>
 
         <!-- Patient & Doctor Related Activities -->
-        <activity android:name=".LoginActivity" android:exported="false" />
-        <activity android:name=".PatientLoginActivity" android:exported="false" />
-        <activity android:name=".PatientSignupActivity" android:exported="false" />
-        <activity android:name=".PatientDashboardActivity" android:exported="false" />
-        <activity android:name=".DoctorLoginActivity" android:exported="false" />
-        <activity android:name=".DoctorSignupActivity" android:exported="false" />
-        <activity android:name=".DoctorHomeActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.LoginActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.PatientLoginActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.PatientSignupActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.PatientDashboardActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.DoctorLoginActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.DoctorSignupActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.DoctorHomeActivity" android:exported="false" />
 
         <!-- App Functional Screens -->
-        <activity android:name=".ComplaintsActivity" android:exported="false" />
-        <activity android:name=".ComorbiditiesActivity" android:exported="false" />
-        <activity android:name=".DailySelfAssessmentActivity" android:exported="false" />
-        <activity android:name=".MedicationsActivity" android:exported="false" />
-        <activity android:name=".InvestigationsActivity" android:exported="false" />
-        <activity android:name=".TreatmentsActivity" android:exported="false" />
-        <activity android:name=".DietRecommendationsActivity" android:exported="false" />
-        <activity android:name=".ExerciseRecommendationsActivity" android:exported="false" />
-        <activity android:name=".ConsultNowActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.ComplaintsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.ComorbiditiesActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.DailySelfAssessmentActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.MedicationsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.InvestigationsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.TreatmentsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.DietRecommendationsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.ExerciseRecommendationsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.ConsultNowActivity" android:exported="false" />
 
         <!-- History Screens -->
-        <activity android:name=".MedicalRecordsActivity" android:exported="false" />
-        <activity android:name=".MedicationsHistoryActivity" android:exported="false" />
-        <activity android:name=".InvestigationHistoryActivity" android:exported="false" />
-        <activity android:name=".TreatmentsHistoryActivity" android:exported="false" />
-        <activity android:name=".ComplaintHistoryActivity" android:exported="false" />
-        <activity android:name=".DoctorComorbiditiesHistoryActivity" android:exported="false" />
-        <activity android:name=".ReferralHistoryActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.MedicalRecordsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.MedicationsHistoryActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.InvestigationHistoryActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.TreatmentsHistoryActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.ComplaintHistoryActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.DoctorComorbiditiesHistoryActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.ReferralHistoryActivity" android:exported="false" />
 
         <!-- Disease Scores -->
         <activity
-            android:name=".DiseaseScoresActivity"
+            android:name="com.saveetha.myjoints.DiseaseScoresActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,12 +63,12 @@
 
         <!-- ✅ NEW: Tender Joints Screen -->
         <activity
-            android:name=".TenderJointsActivity"
+            android:name="com.saveetha.myjoints.TenderJointsActivity"
             android:exported="false" />
 
         <!-- Misc -->
-        <activity android:name=".MyPatientsActivity" android:exported="false" />
-        <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.MyPatientsActivity" android:exported="false" />
+        <activity android:name="com.saveetha.myjoints.SettingsActivity" android:exported="false" />
 
     </application>
 
