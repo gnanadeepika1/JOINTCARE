@@ -1,10 +1,10 @@
 package com.saveetha.myjoints;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class TenderJointsActivity extends AppCompatActivity {
@@ -18,18 +18,12 @@ public class TenderJointsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tender_joints);
 
-        // ✅ SAFE FINDING (NO CRASH)
         ImageView backBtn = findViewById(R.id.back_btn);
         tvSelected = findViewById(R.id.tvSelectedCount);
         btnNext = findViewById(R.id.btnNext);
         ImageView bodyImage = findViewById(R.id.imgBody);
 
-        // 🔴 CRASH GUARD
-        if (backBtn == null || tvSelected == null || btnNext == null || bodyImage == null) {
-            finish(); // prevents crash loop
-            return;
-        }
-
+        // ✅ NORMAL BACK
         backBtn.setOnClickListener(v -> finish());
 
         bodyImage.setOnClickListener(v -> {
@@ -39,8 +33,7 @@ public class TenderJointsActivity extends AppCompatActivity {
         });
 
         btnNext.setOnClickListener(v -> {
-            // Next screen later
-//            startActivity(new Intent(this, ));
+            startActivity(new Intent(this, SwollenJointsActivity.class));
         });
     }
 }

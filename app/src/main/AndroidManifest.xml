@@ -66,6 +66,14 @@
             android:name="com.saveetha.myjoints.TenderJointsActivity"
             android:exported="false" />
 
+        <activity
+            android:name="com.saveetha.myjoints.SwollenJointsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.saveetha.myjoints.AssessmentActivity"
+            android:exported="false" />
+
         <!-- Misc -->
         <activity android:name="com.saveetha.myjoints.MyPatientsActivity" android:exported="false" />
         <activity android:name="com.saveetha.myjoints.SettingsActivity" android:exported="false" />

@@ -29,7 +29,7 @@ public class TreatmentsActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_ID = "patient_id";
 
     // Same backend as doctor
-    private static final String BASE_URL           = "http://10.217.226.180/jointcare/";
+    private static final String BASE_URL           = "http://172.25.109.58/jointcare/";
     private static final String GET_TREATMENTS_URL = BASE_URL + "get_treatments.php";
 
     private RecyclerView rvTreatments;
