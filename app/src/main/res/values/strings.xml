@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">my joints</string>
+    <string name="remission_text">Remission (≤3.3)</string>
+    <string name="low_text">Low Activity (3.4-11.0)</string>
+    <string name="high_text">High Activity (>26.0)</string>
+    <string name="modern_text">Modern Activity (11.1.-26.0)</string>
+
 </resources>

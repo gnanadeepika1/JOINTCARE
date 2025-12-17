@@ -1,5 +1,6 @@
 package com.example.myjoints;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ public class TenderJointsActivity extends AppCompatActivity {
 
         btnNext.setOnClickListener(v -> {
             // Next screen later
+//            startActivity(new Intent(this, ));
         });
     }
 }

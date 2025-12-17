@@ -74,6 +74,8 @@
                     <TextView
                         android:text="Tender\nJoints"
                         android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textColor="#F06292"
                         android:textStyle="bold"
                         android:textSize="12sp"
@@ -101,6 +103,8 @@
                         android:text="Swollen\nJoints"
                         android:textAlignment="center"
                         android:textColor="#B0B0B0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="12sp"
                         android:layout_marginTop="4dp"/>
                 </LinearLayout>
@@ -127,6 +131,8 @@
                         android:textAlignment="center"
                         android:textColor="#B0B0B0"
                         android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
