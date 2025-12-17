@@ -19,7 +19,10 @@
         <activity
             android:name="com.saveetha.myjoints.MainActivity"
             android:exported="true">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- Patient & Doctor Related Activities -->
@@ -55,10 +58,7 @@
         <activity
             android:name="com.saveetha.myjoints.DiseaseScoresActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <!-- ✅ NEW: Tender Joints Screen -->
