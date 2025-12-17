@@ -12,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.saveetha.myjoints.adapters.activity_disease_scores.DiseaseScore;
+import com.saveetha.myjoints.adapters.activity_disease_scores.DiseaseScoreAdapter;
 import com.saveetha.myjoints.databinding.ActivityDiseaseScoresBinding;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class DiseaseScoresActivity extends AppCompatActivity {
 
@@ -92,6 +95,30 @@ public class DiseaseScoresActivity extends AppCompatActivity {
         List<Integer> secondColors = getCircleColorsForSecondGraph(secondEntries);
 
         setupFirstChart(chart2, secondEntries, secondColors);
+
+        List<DiseaseScore> list = new ArrayList<>();
+        list.add(new DiseaseScore(
+                21,
+                3.027125898179314,
+                "2025-09-27T05:23:30.533Z"
+        ));list.add(new DiseaseScore(
+                21,
+                3.027125898179314,
+                "2025-09-27T05:23:30.533Z"
+        ));list.add(new DiseaseScore(
+                21,
+                3.027125898179314,
+                "2025-09-27T05:23:30.533Z"
+        ));
+
+        DiseaseScoreAdapter adapter = new DiseaseScoreAdapter(list);
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(adapter);
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(adapter);
+
     }
 
     /*private void setupSecondChart(ActivityDiseaseScoresBinding binding) {
