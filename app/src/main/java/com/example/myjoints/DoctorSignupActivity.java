@@ -35,7 +35,7 @@ public class DoctorSignupActivity extends AppCompatActivity {
     private static final String KEY_SPECIALIZATION = "specialization";
     private static final String KEY_PASSWORD       = "password";
 
-    private static final String SIGNUP_URL = "http://10.217.226.180/jointcare/doctor_signup.php";
+    private static final String SIGNUP_URL = "http://172.25.109.58/jointcare/doctor_signup.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

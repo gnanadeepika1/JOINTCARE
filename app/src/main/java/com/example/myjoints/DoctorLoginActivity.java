@@ -34,7 +34,7 @@ public class DoctorLoginActivity extends AppCompatActivity {
     private static final String KEY_SPECIAL   = "specialization";
     private static final String KEY_PASSWORD  = "password";
 
-    private static final String LOGIN_URL = "http://10.217.226.180/jointcare/doctor_login.php";
+    private static final String LOGIN_URL = "http://172.25.109.58/jointcare/doctor_login.php";
 
     private SharedPreferences prefs;
 

@@ -41,7 +41,7 @@ public class MedicationsHistoryActivity extends AppCompatActivity {
     private String patientId;
 
     // Doctor uses SAME server & folder as patient
-    private static final String BASE_URL = "http://10.217.226.180/jointcare/";
+    private static final String BASE_URL = "http://172.25.109.58/jointcare/";
     private static final String GET_MEDICATIONS_URL = BASE_URL + "get_medications.php";
     private static final String ADD_MEDICATION_URL  = BASE_URL + "add_medication.php";
 

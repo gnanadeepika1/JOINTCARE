@@ -35,7 +35,7 @@ public class PatientSignupActivity extends AppCompatActivity {
     private static final String DOCTOR_PREFS_NAME = "doctor_prefs";
     private static final String KEY_DOCTOR_ID     = "doctor_id";
 
-    private static final String SIGNUP_URL = "http://10.217.226.180/jointcare/patient_signup.php";
+    private static final String SIGNUP_URL = "http://172.25.109.58/jointcare/patient_signup.php";
     private static final String TAG = "PatientSignup";
 
     @Override

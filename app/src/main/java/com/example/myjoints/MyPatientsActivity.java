@@ -37,9 +37,9 @@ public class MyPatientsActivity extends AppCompatActivity {
 
     // PHP URLs
     private static final String GET_DOCTOR_URL =
-            "http://10.217.226.180/jointcare/get_doctor.php";
+            "http://172.25.109.58/jointcare/get_doctor.php";
     private static final String GET_PATIENTS_URL =
-            "http://10.217.226.180/jointcare/get_patients.php";
+            "http://172.25.109.58/jointcare/get_patients.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

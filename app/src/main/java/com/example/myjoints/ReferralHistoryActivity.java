@@ -38,7 +38,7 @@ public class ReferralHistoryActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_ID = "patient_id";
 
     // Use same server style as TreatmentsHistoryActivity
-    private static final String BASE_URL            = "http://10.217.226.180/jointcare/";
+    private static final String BASE_URL            = "http://172.25.109.58/jointcare/";
     private static final String ADD_REFERRAL_URL    = BASE_URL + "referralhistory_add.php";
     private static final String GET_REFERRALS_URL   = BASE_URL + "referralhistory_get.php";
 

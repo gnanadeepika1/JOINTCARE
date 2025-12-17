@@ -41,9 +41,9 @@ public class ComplaintHistoryActivity extends AppCompatActivity {
     private ComplaintHistoryAdapter adapter;
 
     private static final String GET_COMPLAINTS_URL =
-            "http://10.217.226.180/jointcare/get_complaints.php";
+            "http://172.25.109.58/jointcare/get_complaints.php";
     private static final String ADD_COMPLAINT_URL =
-            "http://10.217.226.180/jointcare/add_complaint.php";
+            "http://172.25.109.58/jointcare/add_complaint.php";
     private static final String TAG = "ComplaintHistory";
 
     private static final String PREFS_NAME_DOCTOR = "doctor_prefs";

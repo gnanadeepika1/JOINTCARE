@@ -39,7 +39,7 @@ public class TreatmentsHistoryActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "patient_prefs";
     private static final String KEY_PATIENT_ID = "patient_id";
 
-    private static final String BASE_URL = "http://10.217.226.180/jointcare/";
+    private static final String BASE_URL = "http://172.25.109.58/jointcare/";
     private static final String ADD_TREATMENT_URL = BASE_URL + "add_treatment.php";
     private static final String GET_TREATMENTS_URL = BASE_URL + "get_treatments.php";
 

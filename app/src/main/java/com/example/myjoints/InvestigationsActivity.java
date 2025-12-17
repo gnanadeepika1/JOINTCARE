@@ -28,7 +28,7 @@ public class InvestigationsActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_ID = "patient_id";
 
     // SAME server & folder as doctor
-    private static final String BASE_URL = "http://10.217.226.180/jointcare/";
+    private static final String BASE_URL = "http://172.25.109.58/jointcare/";
     private static final String GET_INVESTIGATIONS_URL =
             BASE_URL + "get_investigations.php";
 

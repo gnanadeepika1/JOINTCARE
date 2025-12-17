@@ -57,13 +57,20 @@
         <!-- Disease Scores -->
         <activity
             android:name=".DiseaseScoresActivity"
-            android:exported="true" >
+            android:exported="true" />
 
-        </activity>
-
-        <!-- ✅ NEW: Tender Joints Screen -->
+        <!-- Tender / Swollen / Assessment Screens -->
         <activity
             android:name=".TenderJointsActivity"
+            android:exported="false" />
+
+        <!-- ✅ ADDED (ONLY THESE TWO) -->
+        <activity
+            android:name=".SwollenJointsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AssessmentActivity"
             android:exported="false" />
 
         <!-- Misc -->
