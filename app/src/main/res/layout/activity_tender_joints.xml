@@ -21,7 +21,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="#000000"/>
+            app:tint="#000000"/>
 
         <TextView
             android:layout_marginStart="16dp"
