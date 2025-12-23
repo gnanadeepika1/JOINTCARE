@@ -20,7 +20,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="#000000"/>
+            app:tint="#000000"/>
 
         <TextView
             android:layout_marginStart="16dp"
@@ -56,6 +56,8 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp">
 
                     <TextView
@@ -70,12 +72,16 @@
                     <TextView
                         android:text="Tender Joints"
                         android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textColor="#B0B0B0"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
                     android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp">
 
                     <TextView
@@ -90,11 +96,15 @@
                     <TextView
                         android:text="Swollen Joints"
                         android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textColor="#B0B0B0"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center">
 
                     <TextView
@@ -109,6 +119,8 @@
                     <TextView
                         android:text="Assessment"
                         android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textColor="#F06292"/>
                 </LinearLayout>
@@ -120,11 +132,14 @@
             <TextView
                 android:text="Patient Global Assessment"
                 android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"/>
 
             <SeekBar
                 android:id="@+id/seekPatient"
                 android:max="10"
+                android:layout_width="wrap_content"
                 android:progressDrawable="@drawable/custom_seekbar"
                 android:thumbTint="#F06292"
                 android:layout_height="32dp"/>
@@ -132,6 +147,8 @@
             <TextView
                 android:id="@+id/tvPatientValue"
                 android:text="0.0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textColor="#F06292"
                 android:gravity="center"/>
 
@@ -148,11 +165,14 @@
             <TextView
                 android:text="Evaluator Assessment"
                 android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"/>
 
             <SeekBar
                 android:id="@+id/seekEvaluator"
                 android:max="10"
+                android:layout_width="wrap_content"
                 android:progressDrawable="@drawable/custom_seekbar"
                 android:thumbTint="#F06292"
                 android:layout_height="32dp"/>
@@ -160,6 +180,8 @@
             <TextView
                 android:id="@+id/tvEvaluatorValue"
                 android:text="0.0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textColor="#F06292"
                 android:gravity="center"/>
 
@@ -167,6 +189,8 @@
             <TextView
                 android:text="CRP (mg/dL)"
                 android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"/>
 
             <EditText
