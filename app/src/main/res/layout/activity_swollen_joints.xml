@@ -167,6 +167,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/tender_joints_body"
                     android:scaleType="fitCenter"/>
+
             </androidx.cardview.widget.CardView>
 
             <!-- NEXT BUTTON -->

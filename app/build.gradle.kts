@@ -47,6 +47,8 @@ dependencies {
     // UI helpers
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
 
     // testing
     testImplementation(libs.junit)
