@@ -45,7 +45,7 @@ public class InvestigationHistoryActivity extends AppCompatActivity {
     private String patientId;
 
     // Doctor: use SAME backend as patient
-    private static final String BASE_URL               = "http://172.25.109.58/jointcare/";
+    private static final String BASE_URL               = "http://10.131.6.180/jointcare/";
     private static final String ADD_INVESTIGATION_URL  = BASE_URL + "add_investigation.php";
     private static final String GET_INVESTIGATIONS_URL = BASE_URL + "get_investigations.php";
 

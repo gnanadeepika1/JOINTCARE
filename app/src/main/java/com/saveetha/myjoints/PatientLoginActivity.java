@@ -31,7 +31,7 @@ public class PatientLoginActivity extends AppCompatActivity {
     private static final String KEY_PASSWORD   = "password";
     private static final String KEY_PATIENT_NAME  = "patient_name";
     private static final String KEY_PATIENT_EMAIL = "patient_email";
-    private static final String LOGIN_URL = "http://172.25.109.58/jointcare/patient_login_api.php";
+    private static final String LOGIN_URL = "http://10.131.6.180/jointcare/patient_login_api.php";
 
     private static final String TAG = "PatientLogin";
 

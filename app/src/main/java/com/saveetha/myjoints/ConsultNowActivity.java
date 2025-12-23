@@ -39,10 +39,10 @@ public class ConsultNowActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_ID = "patient_id";
 
     private static final String GET_DOCTORS_URL =
-            "http://172.25.109.58/jointcare/get_doctors.php";
+            "http://10.131.6.180/jointcare/get_doctors.php";
 
     private static final String ASSIGN_URL =
-            "http://172.25.109.58/jointcare/assign_doctor_to_patient.php";
+            "http://10.131.6.180/jointcare/assign_doctor_to_patient.php";
 
     private static final String TAG = "ConsultNow";
 

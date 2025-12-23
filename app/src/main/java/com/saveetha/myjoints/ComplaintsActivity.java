@@ -36,7 +36,7 @@ public class ComplaintsActivity extends AppCompatActivity {
 
     // use the same endpoint as doctor history
     private static final String GET_COMPLAINTS_URL =
-            "http://172.25.109.58/jointcare/get_complaints.php";
+            "http://10.131.6.180/jointcare/get_complaints.php";
 
     private static final String TAG = "ComplaintsActivity";
 

@@ -53,7 +53,6 @@
                 android:orientation="horizontal"
                 android:paddingBottom="12dp">
 
-                <!-- STEP 1 -->
                 <LinearLayout
                     android:orientation="vertical"
                     android:gravity="center"
@@ -74,7 +73,6 @@
                         android:textColor="#B0B0B0"/>
                 </LinearLayout>
 
-                <!-- STEP 2 -->
                 <LinearLayout
                     android:orientation="vertical"
                     android:gravity="center"
@@ -95,7 +93,6 @@
                         android:textColor="#B0B0B0"/>
                 </LinearLayout>
 
-                <!-- STEP 3 -->
                 <LinearLayout
                     android:orientation="vertical"
                     android:gravity="center">
@@ -118,14 +115,6 @@
             </LinearLayout>
 
             <!-- TITLE -->
-            <TextView
-                android:text="Step 3: Assessment &amp; CRP"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#F06292"
-                android:layout_marginTop="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
             <!-- PATIENT GLOBAL -->
             <TextView
@@ -136,8 +125,9 @@
             <SeekBar
                 android:id="@+id/seekPatient"
                 android:max="10"
-                android:progressTint="#F06292"
-                android:thumbTint="#F06292"/>
+                android:progressDrawable="@drawable/custom_seekbar"
+                android:thumbTint="#F06292"
+                android:layout_height="32dp"/>
 
             <TextView
                 android:id="@+id/tvPatientValue"
@@ -147,6 +137,15 @@
 
             <!-- EVALUATOR -->
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Step 3: Assessment &amp; CRP"
+                android:textColor="#F06292"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:text="Evaluator Assessment"
                 android:textSize="16sp"
                 android:layout_marginTop="16dp"/>
@@ -154,8 +153,9 @@
             <SeekBar
                 android:id="@+id/seekEvaluator"
                 android:max="10"
-                android:progressTint="#F06292"
-                android:thumbTint="#F06292"/>
+                android:progressDrawable="@drawable/custom_seekbar"
+                android:thumbTint="#F06292"
+                android:layout_height="32dp"/>
 
             <TextView
                 android:id="@+id/tvEvaluatorValue"
@@ -173,7 +173,7 @@
                 android:id="@+id/edtCrp"
                 android:hint="Enter CRP"
                 android:inputType="numberDecimal"
-                android:backgroundTint="#F06292"
+                android:background="@drawable/crp_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -186,7 +186,6 @@
                 android:layout_height="56dp"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="#F06292"/>
-
         </LinearLayout>
     </ScrollView>
 
