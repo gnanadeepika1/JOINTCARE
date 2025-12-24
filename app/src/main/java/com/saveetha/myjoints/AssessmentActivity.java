@@ -1,6 +1,7 @@
 package com.saveetha.myjoints;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.saveetha.myjoints.databinding.ActivityAssessmentBinding;
+import com.saveetha.network.ApiService;
+import com.saveetha.network.RetrofitClient;
+
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AssessmentActivity extends AppCompatActivity {
 
     ActivityAssessmentBinding binding;
+    private static final String PREFS_NAME    = "doctor_prefs";
+    private static final String KEY_DOCTOR_ID = "doctor_id";
+    private SharedPreferences prefs;
 
     float seek1;
     float seek2;
@@ -26,6 +35,8 @@ public class AssessmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAssessmentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         ImageView btnBack = findViewById(R.id.btnBack);
         SeekBar seekPatient = findViewById(R.id.seekPatient);
@@ -73,10 +84,21 @@ public class AssessmentActivity extends AppCompatActivity {
         Intent tenderJointValue = getIntent();
         int tenderJoint = tenderJointValue.getIntExtra("tenderJointSelectionCount", 0);
         int swollenJoint = tenderJointValue.getIntExtra("swollenJointSelectionCount", 0);
-
+        AtomicReference<String> crp = new AtomicReference<>("");
         btnCalculate.setOnClickListener(v -> {
-            String crp = edtCrp.getText().toString().trim();
+             crp.set(edtCrp.getText().toString().trim());
             // Calculation logic can be added here later
         });
+
+        String savedDoctorId = prefs.getString(KEY_DOCTOR_ID, "");
+
+        saveValue(savedDoctorId, tenderJoint, crp.get());
     }
+
+    private void saveValue(String id, float value1, String value2) {
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+        Map<String, Object> request = Map.of("patient_id", id, "pga", value1, "crp", value2);
+
+    }
+
 }
