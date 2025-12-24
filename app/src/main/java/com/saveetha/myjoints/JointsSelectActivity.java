@@ -37,7 +37,7 @@ public class JointsSelectActivity extends AppCompatActivity {
 
         tvCount = binding.tvCount;
 
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

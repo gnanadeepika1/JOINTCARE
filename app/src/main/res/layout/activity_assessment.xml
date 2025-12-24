@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/root"
     android:background="#F5F5F5">
 
     <!-- HEADER -->
@@ -56,8 +57,9 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginEnd="24dp">
 
                     <TextView
@@ -79,8 +81,9 @@
 
                 <LinearLayout
                     android:orientation="vertical"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp">
 
@@ -103,7 +106,8 @@
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center">
 
@@ -138,10 +142,12 @@
 
             <SeekBar
                 android:id="@+id/seekPatient"
-                android:max="10"
-                android:layout_width="wrap_content"
-                android:progressDrawable="@drawable/custom_seekbar"
+                android:max="100"
+                android:layout_width="match_parent"
                 android:thumbTint="#F06292"
+                android:progressTint="#FF69B4"
+                android:progress="10"
+                android:progressBackgroundTint="#FFC0CB"
                 android:layout_height="32dp"/>
 
             <TextView
@@ -172,8 +178,7 @@
             <SeekBar
                 android:id="@+id/seekEvaluator"
                 android:max="10"
-                android:layout_width="wrap_content"
-                android:progressDrawable="@drawable/custom_seekbar"
+                android:layout_width="match_parent"
                 android:thumbTint="#F06292"
                 android:layout_height="32dp"/>
 

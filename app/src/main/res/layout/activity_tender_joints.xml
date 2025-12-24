@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/root"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
@@ -160,18 +161,19 @@
 
             <!-- BODY IMAGE -->
             <androidx.cardview.widget.CardView
-                android:layout_marginTop="16dp"
+                android:id="@+id/dotContainer"
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp">
+                app:cardElevation="0dp"
+                android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/imgBody"
+                    android:id="@+id/bodyImage"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/tender_joints_body"
-                    android:scaleType="fitCenter"/>
+                    android:layout_height="800dp"
+                    android:src="@drawable/ic_body"
+                    />
+
             </androidx.cardview.widget.CardView>
 
             <!-- NEXT BUTTON -->
@@ -181,11 +183,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="Next"
-                android:enabled="false"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="#F06292"/>
+                android:backgroundTint="#F06292"
+                />
 
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

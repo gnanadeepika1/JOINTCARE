@@ -1,5 +1,6 @@
 package com.saveetha.myjoints;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -8,13 +9,23 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.saveetha.myjoints.databinding.ActivityAssessmentBinding;
 
 public class AssessmentActivity extends AppCompatActivity {
 
+    ActivityAssessmentBinding binding;
+
+    float seek1;
+    float seek2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assessment);
+        binding = ActivityAssessmentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ImageView btnBack = findViewById(R.id.btnBack);
         SeekBar seekPatient = findViewById(R.id.seekPatient);
@@ -25,11 +36,13 @@ public class AssessmentActivity extends AppCompatActivity {
         Button btnCalculate = findViewById(R.id.btnCalculate);
 
         btnBack.setOnClickListener(v -> finish());
-
+        float maxValue = 10.0f;
         seekPatient.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvPatientValue.setText(String.valueOf(progress));
+                float value = (progress / 100f) * maxValue;
+                seek1 = value;
+                tvPatientValue.setText(String.format("Value: %.1f", value));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -38,11 +51,28 @@ public class AssessmentActivity extends AppCompatActivity {
         seekEvaluator.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvEvaluatorValue.setText(String.valueOf(progress));
+                float value = (progress / 100f) * maxValue;
+                seek2 = value;
+                tvEvaluatorValue.setText(String.format("Value: %.1f", value));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+            );
+            return insets;
+        });
+
+        Intent tenderJointValue = getIntent();
+        int tenderJoint = tenderJointValue.getIntExtra("tenderJointSelectionCount", 0);
+        int swollenJoint = tenderJointValue.getIntExtra("swollenJointSelectionCount", 0);
 
         btnCalculate.setOnClickListener(v -> {
             String crp = edtCrp.getText().toString().trim();
