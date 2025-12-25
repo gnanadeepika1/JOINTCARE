@@ -1,5 +1,9 @@
 package com.saveetha.network;
 
+import android.os.Build;
+
+import java.time.Duration;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -30,9 +34,15 @@ public class RetrofitClient {
                     new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(loggingInterceptor)
-                    .build();
+            OkHttpClient okHttpClient = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                okHttpClient = new OkHttpClient.Builder()
+                        .addInterceptor(loggingInterceptor)
+                        .connectTimeout(Duration.ofSeconds(60))   // connection timeout
+                        .readTimeout(Duration.ofSeconds(60))      // server response timeout
+                        .writeTimeout(Duration.ofSeconds(60))     // request body timeout
+                        .build();
+            }
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
