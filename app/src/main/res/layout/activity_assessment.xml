@@ -142,7 +142,7 @@
 
             <SeekBar
                 android:id="@+id/seekPatient"
-                android:max="10"
+                android:max="100"
                 android:layout_width="match_parent"
                 android:thumbTint="#F06292"
                 android:progressTint="#FF69B4"

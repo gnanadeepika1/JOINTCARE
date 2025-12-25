@@ -111,9 +111,13 @@ public class TenderJointsActivity extends AppCompatActivity {
         tvSelected = findViewById(R.id.tvSelectedCount);
         btnNext = findViewById(R.id.btnNext);
 
+        Intent intet = getIntent();
+        String patientId = intet.getStringExtra("patient_id");
+
         btnNext.setOnClickListener(v -> {
             Intent intent = new Intent(this, SwollenJointsActivity.class);
             intent.putExtra("tenderJointSelectionCount", selected.size());
+            intent.putExtra("patient_id", patientId);
             startActivity(intent);
         });
 

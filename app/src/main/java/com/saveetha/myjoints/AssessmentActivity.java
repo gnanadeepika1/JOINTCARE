@@ -40,6 +40,7 @@ public class AssessmentActivity extends AppCompatActivity {
 
     float seek1;
     float seek2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +95,8 @@ public class AssessmentActivity extends AppCompatActivity {
         Intent tenderJointValue = getIntent();
         int tenderJoint = tenderJointValue.getIntExtra("tenderJointSelectionCount", 0);
         int swollenJoint = tenderJointValue.getIntExtra("swollenJointSelectionCount", 0);
+        String patientId = tenderJointValue.getStringExtra("patient_id");
         AtomicReference<String> crp = new AtomicReference<>("");
-        String savedDoctorId = prefs.getString(KEY_DOCTOR_ID, "");
         btnCalculate.setOnClickListener(v -> {
             String crpstr = edtCrp.getText().toString().trim();
              crp.set(crpstr);
@@ -104,10 +105,8 @@ public class AssessmentActivity extends AppCompatActivity {
                  return;
              }
             // Calculation logic can be added here later
-            saveValue(savedDoctorId, tenderJoint, crp.get());
-
+            saveValue(patientId, tenderJoint, crp.get());
         });
-
 
     }
 
@@ -144,6 +143,5 @@ public class AssessmentActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 }

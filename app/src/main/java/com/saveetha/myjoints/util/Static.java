@@ -15,7 +15,7 @@ public interface Static {
     static AlertDialog showProgress(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(R.layout.dialog_progress);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         AlertDialog progress = builder.create();
         progress.setCanceledOnTouchOutside(false);
         return progress;

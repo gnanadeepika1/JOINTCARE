@@ -1,6 +1,8 @@
 package com.saveetha.myjoints;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.saveetha.myjoints.adapters.activity_disease_scores.DiseaseScore;
 import com.saveetha.myjoints.adapters.activity_disease_scores.DiseaseScoreAdapter;
+import com.saveetha.myjoints.data.DiseaseScores;
 import com.saveetha.myjoints.databinding.ActivityDiseaseScoresBinding;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
@@ -23,18 +26,30 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.saveetha.myjoints.util.Static;
+import com.saveetha.network.RetrofitClient;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DiseaseScoresActivity extends AppCompatActivity {
 
     ActivityDiseaseScoresBinding binding;
+    private static final String PREFS_NAME    = "doctor_prefs";
+    private static final String KEY_DOCTOR_ID = "doctor_id";
+    private SharedPreferences prefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +57,7 @@ public class DiseaseScoresActivity extends AppCompatActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding = ActivityDiseaseScoresBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         WindowInsetsControllerCompat controller =
                 new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
@@ -62,64 +78,85 @@ public class DiseaseScoresActivity extends AppCompatActivity {
             return insets;
         });
 
+        Intent intet = getIntent();
+        String patientId = intet.getStringExtra("patient_id");
+        String title = patientId + " - Disease Scores";
+        binding.titleTV.setText(title);
+
         binding.fabAddScore.setOnClickListener(view -> {
-            startActivity(new Intent(this, TenderJointsActivity.class));
+            Intent intent = new Intent(this, TenderJointsActivity.class);
+            intent.putExtra("patient_id", patientId);
+            startActivity(intent);
         });
 
-        List<Entry> entries = getEntites();
-        List<Integer> colors = getCircleColors(entries);
-
-        LineChart chart1 = binding.sdaiChart;
-         getYaxis(
-                chart1,
-                0.0f,
-                100.0f,
-                6,
-                createLimitLine(36.1f, "High"),
-                createLimitLine( 18.0f, "Moderate"),
-                createLimitLine( 10.0f, "Low")
-        );
-        setupFirstChart(chart1, entries, colors);
-
-        LineChart chart2 = binding.dasChart;
-        getYaxis(
-                chart2,
-                0.0f,
-                10.0f,
-                5,
-                createLimitLine(3.4f, "High"),
-                createLimitLine( 3.9f, "Moderate"),
-                createLimitLine( 5.8f, "Low")
-        );
-        List<Entry> secondEntries = getSecondEntries();
-        List<Integer> secondColors = getCircleColorsForSecondGraph(secondEntries);
-
-        setupFirstChart(chart2, secondEntries, secondColors);
-
-        List<DiseaseScore> list = new ArrayList<>();
-        list.add(new DiseaseScore(
-                21,
-                3.027125898179314,
-                "2025-09-27T05:23:30.533Z"
-        ));list.add(new DiseaseScore(
-                21,
-                3.027125898179314,
-                "2025-09-27T05:23:30.533Z"
-        ));list.add(new DiseaseScore(
-                21,
-                3.027125898179314,
-                "2025-09-27T05:23:30.533Z"
-        ));
-
-        DiseaseScoreAdapter adapter = new DiseaseScoreAdapter(list);
-
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(adapter);
-
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(adapter);
+        getGraph(patientId);
 
     }
+
+    private void getGraph(String patientID) {
+
+        AlertDialog progress = Static.showProgress(this);
+        progress.show();
+
+        RetrofitClient.getService()
+                .getGraph(patientID)
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<DiseaseScores> call, Response<DiseaseScores> response) {
+                        progress.dismiss();
+
+                        if (response.isSuccessful()) {
+                            if (response.body().getData()!=null && !response.body().getData().isEmpty()) {
+                                List<DiseaseScores.Data> data = response.body().getData();
+                                List<Entry> entries = getEntites(data);
+                                List<Integer> colors = getCircleColors(entries);
+
+                                LineChart chart1 = binding.sdaiChart;
+                                getYaxis(
+                                        chart1,
+                                        0.0f,
+                                        100.0f,
+                                        6,
+                                        createLimitLine(36.1f, "High"),
+                                        createLimitLine( 18.0f, "Moderate"),
+                                        createLimitLine( 10.0f, "Low")
+                                );
+                                setupFirstChart(chart1, entries, colors);
+
+                                LineChart chart2 = binding.dasChart;
+                                getYaxis(
+                                        chart2,
+                                        0.0f,
+                                        10.0f,
+                                        5,
+                                        createLimitLine(3.4f, "High"),
+                                        createLimitLine( 3.9f, "Moderate"),
+                                        createLimitLine( 5.8f, "Low")
+                                );
+                                List<Entry> secondEntries = getSecondEntries(data);
+                                List<Integer> secondColors = getCircleColorsForSecondGraph(secondEntries);
+
+                                setupFirstChart(chart2, secondEntries, secondColors);
+
+                                DiseaseScoreAdapter adapter = new DiseaseScoreAdapter(response.body().getData());
+                                binding.recyclerView.setLayoutManager(new LinearLayoutManager(DiseaseScoresActivity.this));
+                                binding.recyclerView.setAdapter(adapter);
+                            } else {
+                                Static.toast(DiseaseScoresActivity.this, "No Patient Records Found");
+                            }
+                        } else {
+                            Static.showErrorResponse(DiseaseScoresActivity.this, response.errorBody());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DiseaseScores> call, Throwable t) {
+                        progress.dismiss();
+                        Static.showError(DiseaseScoresActivity.this, t.getMessage());
+                    }
+                });
+    }
+
 
     private void setupFirstChart(
             LineChart chart, List<Entry> entries,
@@ -223,35 +260,21 @@ public class DiseaseScoresActivity extends AppCompatActivity {
         return left;
     }
 
-    private List<Entry> getEntites() {
+    private List<Entry> getEntites(List<DiseaseScores.Data> data) {
+
         List<Entry> entries =  new ArrayList<>();
-        entries.add(new Entry(0, 38.0f));
-        entries.add(new Entry(1, 14.4f));
-        entries.add(new Entry(2, 40.4f));
-        entries.add(new Entry(3, 40.5f));
-        entries.add(new Entry(4, 64.7f));
-        entries.add(new Entry(5, 20.6f));
-        entries.add(new Entry(6, 21.0f));
-        entries.add(new Entry(7, 82.2f));
-        entries.add(new Entry(8, 81.4f));
-        entries.add(new Entry(9, 81.0f));
-        entries.add(new Entry(10, 80.0f));
+        for(int i = 0;i<data.size();i++) {
+            entries.add(new Entry(i, data.get(i).getCrp()));
+        }
 
         return entries;
     }
 
-    private List<Entry> getSecondEntries() {
+    private List<Entry> getSecondEntries(List<DiseaseScores.Data> data) {
         List<Entry> entries =  new ArrayList<>();
-        entries.add(new Entry(0, 3.4f));
-        entries.add(new Entry(1, 2.3f));
-        entries.add(new Entry(2, 4.2f));
-        entries.add(new Entry(3, 4.1f));
-        entries.add(new Entry(4, 2.6f));
-        entries.add(new Entry(6, 3.0f));
-        entries.add(new Entry(7, 4.0f));
-        entries.add(new Entry(8, 3.9f));
-        entries.add(new Entry(9, 3.8f));
-        entries.add(new Entry(10, 3.7f));
+        for(int i = 0;i<data.size();i++) {
+            entries.add(new Entry(i, data.get(i).getPga()));
+        }
 
         return entries;
     }

@@ -115,6 +115,7 @@ public class SwollenJointsActivity extends AppCompatActivity {
 
         Intent tenderJointValue = getIntent();
         int tenderJoint = tenderJointValue.getIntExtra("tenderJointSelectionCount", 0);
+        String patientId = tenderJointValue.getStringExtra("patient_id");
         // Next button → Assessment page
         btnNext.setOnClickListener(v -> {
             Intent intent = new Intent(
@@ -123,6 +124,7 @@ public class SwollenJointsActivity extends AppCompatActivity {
             );
             intent.putExtra("tenderJointSelectionCount", tenderJoint);
             intent.putExtra("swollenJointSelectionCount", selected.size());
+            intent.putExtra("patient_id", patientId);
             startActivity(intent);
         });
 

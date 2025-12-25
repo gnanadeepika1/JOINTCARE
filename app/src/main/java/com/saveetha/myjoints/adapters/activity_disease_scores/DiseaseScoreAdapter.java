@@ -1,24 +1,26 @@
 package com.saveetha.myjoints.adapters.activity_disease_scores;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.saveetha.myjoints.data.DiseaseScores;
 import com.saveetha.myjoints.databinding.ItemDiseaseScoreBinding;
 
 import java.util.List;
 
 public class DiseaseScoreAdapter extends RecyclerView.Adapter<DiseaseScoreAdapter.ViewHolder> {
 
-    private final List<DiseaseScore> list;
+    private final List<DiseaseScores.Data> list;
 
     public interface OnDeleteClickListener {
         void onDelete(int position);
     }
 
-    public DiseaseScoreAdapter(List<DiseaseScore> list) {
+    public DiseaseScoreAdapter(List<DiseaseScores.Data> list) {
         this.list = list;
     }
 
@@ -37,11 +39,12 @@ public class DiseaseScoreAdapter extends RecyclerView.Adapter<DiseaseScoreAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DiseaseScore item = list.get(position);
+        DiseaseScores.Data item = list.get(position);
 
-        holder.binding.tvSdai.setText("SDAI: " + item.getSdai());
-        holder.binding.tvDas.setText("DAS28-CRP: " + item.getDas28Crp());
-        holder.binding.tvDate.setText("Date: " + item.getDate());
+        holder.binding.ivDelete.setVisibility(View.INVISIBLE);
+        holder.binding.tvSdai.setText("SDAI: " + item.getPga());
+        holder.binding.tvDas.setText("DAS28-CRP: " + item.getCrp());
+        holder.binding.tvDate.setText("Date: " + item.getCreated_at());
 
         holder.binding.ivDelete.setOnClickListener(v -> {
 
