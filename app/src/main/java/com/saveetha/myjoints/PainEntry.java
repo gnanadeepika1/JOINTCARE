@@ -3,9 +3,9 @@ package com.saveetha.myjoints;
 import com.google.gson.annotations.SerializedName;
 
 public class PainEntry {
-    @SerializedName("pain")
+    @SerializedName("pain_value")
     private final int value;
-    @SerializedName("date")
+    @SerializedName("record_date")
     private final String isoDate;
 
     public PainEntry(int value, String isoDate) {

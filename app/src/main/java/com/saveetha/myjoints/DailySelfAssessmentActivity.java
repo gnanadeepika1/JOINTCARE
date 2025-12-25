@@ -19,6 +19,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.button.MaterialButton;
+import com.saveetha.myjoints.adapters.activity_disease_scores.DiseaseScoreAdapter;
+import com.saveetha.myjoints.data.DiseaseScores;
 import com.saveetha.myjoints.databinding.ActivityDailyPainBinding;
 import com.saveetha.myjoints.util.Static;
 import com.saveetha.network.RetrofitClient;
@@ -41,11 +43,10 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
     private SeekBar seekPain;
     private MaterialButton btnSave;
     private LineChart lineChart;
-    private RecyclerView rvEntries;
     private ImageView backBtn;
+    PainEntryAdapter adapter;
 
     private final List<PainEntry> entries = new ArrayList<>();
-    private PainEntryAdapter adapter;
 
     private ActivityDailyPainBinding binding;
 
@@ -58,32 +59,57 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
         seekPain = findViewById(R.id.seekPain);
         btnSave = findViewById(R.id.btnSave);
         lineChart = findViewById(R.id.lineChart);
-        rvEntries = findViewById(R.id.rvEntries);
         backBtn = findViewById(R.id.back_btn);
 
         backBtn.setOnClickListener(v -> onBackPressed());
 
-        adapter = new PainEntryAdapter(entries);
-        rvEntries.setLayoutManager(new LinearLayoutManager(this));
-        rvEntries.setAdapter(adapter);
-
-        setupChart();
-        addSampleData(); // optional
         Intent intent = getIntent();
         String patientId = intent.getStringExtra("patient_id");
 
         btnSave.setOnClickListener(v -> {
             int value = seekPain.getProgress();
-            String iso = nowIso();
-
-            entries.add(0, new PainEntry(value, iso));
-            adapter.notifyItemInserted(0);
-            rvEntries.scrollToPosition(0);
-
-            updateChart();
-
             saveValue(patientId, value);
         });
+
+        getGraph(patientId);
+    }
+
+    private void getGraph(String patientID) {
+
+        AlertDialog progress = Static.showProgress(this);
+        progress.show();
+
+        RetrofitClient.getService()
+                .getPainValues(patientID)
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<PainResponse> call, Response<PainResponse> response) {
+                        progress.dismiss();
+
+                        if (response.isSuccessful()) {
+                            if (response.body().getData()!=null && !response.body().getData().isEmpty()) {
+                                List<PainEntry> data = response.body().getData();
+
+                                entries.addAll(data);
+                                setupChart();
+
+                                 adapter = new PainEntryAdapter(data);
+                                binding.rvEntries.setLayoutManager(new LinearLayoutManager(DailySelfAssessmentActivity.this));
+                                binding.rvEntries.setAdapter(adapter);
+                            } else {
+                                Static.toast(DailySelfAssessmentActivity.this, "No Patient Records Found");
+                            }
+                        } else {
+                            Static.showErrorResponse(DailySelfAssessmentActivity.this, response.errorBody());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PainResponse> call, Throwable t) {
+                        progress.dismiss();
+                        Static.showError(DailySelfAssessmentActivity.this, t.getMessage());
+                    }
+                });
     }
 
     private void saveValue(String id, int value1) {
@@ -103,6 +129,12 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
                                            Response<Map<String, Object>> response) {
                         progress.dismiss();
                         if (response.isSuccessful()) {
+                            String iso = nowIso();
+                            entries.add(0, new PainEntry(value1, iso));
+                            if(adapter!=null) {
+                                adapter.notifyDataSetChanged();
+                            }
+                            updateChart();
                             Static.showResponse(DailySelfAssessmentActivity.this, response.body().get("message").toString());
                         } else {
                             Static.showErrorResponse(DailySelfAssessmentActivity.this,
@@ -176,14 +208,4 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
         return sdf.format(new Date());
     }
 
-    private void addSampleData() {
-        entries.add(new PainEntry(3, nowIso()));
-        entries.add(new PainEntry(5, nowIso()));
-        entries.add(new PainEntry(5, nowIso()));
-        entries.add(new PainEntry(6, nowIso()));
-        entries.add(new PainEntry(5, nowIso()));
-
-        adapter.notifyDataSetChanged();
-        updateChart();
-    }
 }
