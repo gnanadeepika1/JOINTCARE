@@ -103,13 +103,12 @@ public class AssessmentActivity extends AppCompatActivity {
     }
 
     private void saveValue(String id, float value1, String value2) {
-        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         Map<String, Object> request = Map.of("patient_id", id, "pga", value1, "crp", value2);
 
         AlertDialog progress = Static.showProgress(this);
         try {
             progress.show();
-            Response<Map<String, Object>> res =  apiService.insertDiseaseScore(request);
+            Response<Map<String, Object>> res =  RetrofitClient.getService().insertDiseaseScore(request);
             if(res.isSuccessful()) {
                 Static.showResponse(this, "Data inserted successfully");
             } else {
@@ -120,7 +119,5 @@ public class AssessmentActivity extends AppCompatActivity {
         }
         progress.dismiss();
     }
-
-
 
 }

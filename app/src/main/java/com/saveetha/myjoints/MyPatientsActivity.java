@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.saveetha.network.RetrofitClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,9 +39,9 @@ public class MyPatientsActivity extends AppCompatActivity {
 
     // PHP URLs
     private static final String GET_DOCTOR_URL =
-            "http://10.131.6.180/jointcare/get_doctor.php";
+            RetrofitClient.BASE_URL+"jointcare/get_doctor.php";
     private static final String GET_PATIENTS_URL =
-            "http://10.131.6.180/jointcare/get_patients.php";
+            RetrofitClient.BASE_URL+"jointcare/get_patients.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

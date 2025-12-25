@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.saveetha.myjoints.util.Static;
+import com.saveetha.network.RetrofitClient;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -34,7 +37,7 @@ public class DoctorLoginActivity extends AppCompatActivity {
     private static final String KEY_SPECIAL   = "specialization";
     private static final String KEY_PASSWORD  = "password";
 
-    private static final String LOGIN_URL = "http://10.131.6.180/jointcare/doctor_login.php";
+    private static final String LOGIN_URL = RetrofitClient.BASE_URL+"jointcare/doctor_login.php";
 
     private SharedPreferences prefs;
 
@@ -127,10 +130,11 @@ public class DoctorLoginActivity extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) { sb.append(line); }
                 reader.close();
 
-                JSONObject respJson = new JSONObject(sb.toString().trim());
+                String response  = sb.toString().trim();
+//                runOnUiThread(() -> {Static.showError(this, response);});
+                JSONObject respJson = new JSONObject(response);
                 boolean success = respJson.optBoolean("success", false);
                 String message  = respJson.optString("message", "");
-
                 runOnUiThread(() -> {
                     if (success) {
                         String serverDoctorId = respJson.optString("doctor_id", doctorId);
@@ -169,9 +173,11 @@ public class DoctorLoginActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->
-                        Toast.makeText(DoctorLoginActivity.this,
-                                "Network error: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(DoctorLoginActivity.this,
+//                                "Network error: " + e.getMessage(),
+//                                Toast.LENGTH_SHORT).show()
+                        Static.showError(this, e.getMessage())
+
                 );
             } finally {
                 if (conn != null) conn.disconnect();

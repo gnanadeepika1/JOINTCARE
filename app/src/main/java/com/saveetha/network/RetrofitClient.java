@@ -8,8 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static Retrofit retrofit;
+    private static ApiService service;
 
-    private static final String BASE_URL = "https://yourdomain.com/api/";
+//    public static final String BASE_URL = "https://2fk3pt3p-80.inc1.devtunnels.ms/";
+
+    /**
+     *
+     */
+    private static final String BASE_URL = "https://3cxr1p7f-80.inc1.devtunnels.ms/";
 
     private RetrofitClient() {
         // no instance
@@ -36,6 +42,13 @@ public class RetrofitClient {
         }
 
         return retrofit;
+    }
+
+    public static ApiService getService() {
+        if(service==null) {
+            service = getInstance().create(ApiService.class);
+        }
+        return service;
     }
 }
 
