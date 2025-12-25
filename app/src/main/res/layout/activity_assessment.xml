@@ -177,7 +177,7 @@
 
             <SeekBar
                 android:id="@+id/seekEvaluator"
-                android:max="10"
+                android:max="100"
                 android:layout_width="match_parent"
                 android:thumbTint="#F06292"
                 android:layout_height="32dp"/>
