@@ -1,5 +1,7 @@
 package com.saveetha.myjoints;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -15,11 +18,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.saveetha.myjoints.databinding.ActivityAssessmentBinding;
+import com.saveetha.myjoints.util.Static;
 import com.saveetha.network.ApiService;
 import com.saveetha.network.RetrofitClient;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class AssessmentActivity extends AppCompatActivity {
 
@@ -99,6 +106,21 @@ public class AssessmentActivity extends AppCompatActivity {
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         Map<String, Object> request = Map.of("patient_id", id, "pga", value1, "crp", value2);
 
+        AlertDialog progress = Static.showProgress(this);
+        try {
+            progress.show();
+            Response<Map<String, Object>> res =  apiService.insertDiseaseScore(request);
+            if(res.isSuccessful()) {
+                Static.showResponse(this, "Data inserted successfully");
+            } else {
+                Static.showErrorResponse(this, res.errorBody());
+            }
+        } catch (Exception e) {
+            Static.showError(this, e.getMessage());
+        }
+        progress.dismiss();
     }
+
+
 
 }
