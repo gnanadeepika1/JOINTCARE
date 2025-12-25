@@ -95,14 +95,15 @@ public class AssessmentActivity extends AppCompatActivity {
         int tenderJoint = tenderJointValue.getIntExtra("tenderJointSelectionCount", 0);
         int swollenJoint = tenderJointValue.getIntExtra("swollenJointSelectionCount", 0);
         AtomicReference<String> crp = new AtomicReference<>("");
+        String savedDoctorId = prefs.getString(KEY_DOCTOR_ID, "");
         btnCalculate.setOnClickListener(v -> {
              crp.set(edtCrp.getText().toString().trim());
             // Calculation logic can be added here later
+
         });
 
-        String savedDoctorId = prefs.getString(KEY_DOCTOR_ID, "");
-
         saveValue(savedDoctorId, tenderJoint, crp.get());
+
     }
 
     private void saveValue(String id, float value1, String value2) {
