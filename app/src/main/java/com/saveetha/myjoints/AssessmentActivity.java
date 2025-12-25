@@ -97,12 +97,17 @@ public class AssessmentActivity extends AppCompatActivity {
         AtomicReference<String> crp = new AtomicReference<>("");
         String savedDoctorId = prefs.getString(KEY_DOCTOR_ID, "");
         btnCalculate.setOnClickListener(v -> {
-             crp.set(edtCrp.getText().toString().trim());
+            String crpstr = edtCrp.getText().toString().trim();
+             crp.set(crpstr);
+             if(crpstr.isEmpty()) {
+                 Static.toast(AssessmentActivity.this, "Enter crp");
+                 return;
+             }
             // Calculation logic can be added here later
+            saveValue(savedDoctorId, tenderJoint, crp.get());
 
         });
 
-        saveValue(savedDoctorId, tenderJoint, crp.get());
 
     }
 
