@@ -10,12 +10,12 @@ public class RetrofitClient {
     private static Retrofit retrofit;
     private static ApiService service;
 
-//    public static final String BASE_URL = "https://2fk3pt3p-80.inc1.devtunnels.ms/";
+    public static final String BASE_URL = "https://2fk3pt3p-80.inc1.devtunnels.ms/";
 
     /**
      *
      */
-    public static final String BASE_URL = "https://3cxr1p7f-80.inc1.devtunnels.ms/";
+//    public static final String BASE_URL = "https://3cxr1p7f-80.inc1.devtunnels.ms/";
 
     private RetrofitClient() {
         // no instance

@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @POST("insert_disease_score.php")
+    @POST("JOINTCARE/save_graph.php")
     Call<Map<String, Object>> insertDiseaseScore(@Body Map<String, Object> request);
 
 }
