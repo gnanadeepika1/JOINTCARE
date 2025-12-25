@@ -59,6 +59,7 @@ public class PatientDashboardActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_NAME  = "patient_name";
     private static final String KEY_PATIENT_EMAIL = "patient_email";
 
+    String patientId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class PatientDashboardActivity extends AppCompatActivity {
 
         // Load patient info from SharedPreferences
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String patientId    = prefs.getString(KEY_PATIENT_ID, "");
+        patientId    = prefs.getString(KEY_PATIENT_ID, "");
         String patientName  = prefs.getString(KEY_PATIENT_NAME, "");
         String patientEmail = prefs.getString(KEY_PATIENT_EMAIL, "");
 
@@ -160,7 +161,9 @@ public class PatientDashboardActivity extends AppCompatActivity {
                 } else if ("Comorbidities".equalsIgnoreCase(label)) {
                     startActivity(new Intent(this, ComorbiditiesActivity.class));
                 } else if ("Daily Assessment".equalsIgnoreCase(label)) {
-                    startActivity(new Intent(this, DailySelfAssessmentActivity.class));
+                    Intent inten = new Intent(this, DailySelfAssessmentActivity.class);
+                    inten.putExtra("patient_id", patientId);
+                    startActivity(inten);
                 } else if ("Medications".equalsIgnoreCase(label)) {
                     startActivity(new Intent(this, MedicationsActivity.class));
                 } else if ("Investigations".equalsIgnoreCase(label)) {

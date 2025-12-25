@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.saveetha.network.RetrofitClient;
+
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -31,7 +34,7 @@ public class PatientLoginActivity extends AppCompatActivity {
     private static final String KEY_PASSWORD   = "password";
     private static final String KEY_PATIENT_NAME  = "patient_name";
     private static final String KEY_PATIENT_EMAIL = "patient_email";
-    private static final String LOGIN_URL = "http://10.131.6.180/jointcare/patient_login_api.php";
+    private static final String LOGIN_URL = RetrofitClient.BASE_URL+"jointcare/patient_login_api.php";
 
     private static final String TAG = "PatientLogin";
 

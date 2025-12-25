@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.saveetha.network.RetrofitClient;
 
 import org.json.JSONObject;
 
@@ -35,7 +36,7 @@ public class DoctorSignupActivity extends AppCompatActivity {
     private static final String KEY_SPECIALIZATION = "specialization";
     private static final String KEY_PASSWORD       = "password";
 
-    private static final String SIGNUP_URL = "http://10.131.6.180/jointcare/doctor_signup.php";
+    private static final String SIGNUP_URL = RetrofitClient.BASE_URL+"jointcare/doctor_signup.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

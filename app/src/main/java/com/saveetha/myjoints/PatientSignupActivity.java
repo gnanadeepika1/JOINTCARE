@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
+import com.saveetha.network.RetrofitClient;
+
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -35,7 +37,7 @@ public class PatientSignupActivity extends AppCompatActivity {
     private static final String DOCTOR_PREFS_NAME = "doctor_prefs";
     private static final String KEY_DOCTOR_ID     = "doctor_id";
 
-    private static final String SIGNUP_URL = "http://10.131.6.180/jointcare/patient_signup.php";
+    private static final String SIGNUP_URL = RetrofitClient.BASE_URL+"jointcare/patient_signup.php";
     private static final String TAG = "PatientSignup";
 
     @Override

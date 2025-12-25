@@ -1,7 +1,11 @@
 package com.saveetha.myjoints;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PainEntry {
+    @SerializedName("pain")
     private final int value;
+    @SerializedName("date")
     private final String isoDate;
 
     public PainEntry(int value, String isoDate) {

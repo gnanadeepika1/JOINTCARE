@@ -1,5 +1,7 @@
 package com.saveetha.myjoints;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -17,13 +19,22 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.button.MaterialButton;
+import com.saveetha.myjoints.databinding.ActivityDailyPainBinding;
+import com.saveetha.myjoints.util.Static;
+import com.saveetha.network.RetrofitClient;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DailySelfAssessmentActivity extends AppCompatActivity {
 
@@ -36,10 +47,13 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
     private final List<PainEntry> entries = new ArrayList<>();
     private PainEntryAdapter adapter;
 
+    private ActivityDailyPainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_daily_pain);  // Keep SAME layout
+        binding = ActivityDailyPainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());  // Keep SAME layout
 
         seekPain = findViewById(R.id.seekPain);
         btnSave = findViewById(R.id.btnSave);
@@ -55,6 +69,8 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
 
         setupChart();
         addSampleData(); // optional
+        Intent intent = getIntent();
+        String patientId = intent.getStringExtra("patient_id");
 
         btnSave.setOnClickListener(v -> {
             int value = seekPain.getProgress();
@@ -65,8 +81,41 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
             rvEntries.scrollToPosition(0);
 
             updateChart();
-            Toast.makeText(this, "Saved pain: " + value, Toast.LENGTH_SHORT).show();
+
+            saveValue(patientId, value);
         });
+    }
+
+    private void saveValue(String id, int value1) {
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("user_id", id);
+        request.put("pain_value", value1);
+
+        AlertDialog progress = Static.showProgress(this);
+        progress.show();
+
+        RetrofitClient.getService()
+                .saveDailyPainValue(request)
+                .enqueue(new Callback<Map<String, Object>>() {
+                    @Override
+                    public void onResponse(Call<Map<String, Object>> call,
+                                           Response<Map<String, Object>> response) {
+                        progress.dismiss();
+                        if (response.isSuccessful()) {
+                            Static.showResponse(DailySelfAssessmentActivity.this, response.body().get("message").toString());
+                        } else {
+                            Static.showErrorResponse(DailySelfAssessmentActivity.this,
+                                    response.errorBody());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                        progress.dismiss();
+                        Static.showError(DailySelfAssessmentActivity.this, t.getMessage());
+                    }
+                });
     }
 
     private void setupChart() {
