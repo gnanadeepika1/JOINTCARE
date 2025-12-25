@@ -22,10 +22,13 @@ import com.saveetha.myjoints.util.Static;
 import com.saveetha.network.ApiService;
 import com.saveetha.network.RetrofitClient;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AssessmentActivity extends AppCompatActivity {
@@ -103,21 +106,38 @@ public class AssessmentActivity extends AppCompatActivity {
     }
 
     private void saveValue(String id, float value1, String value2) {
-        Map<String, Object> request = Map.of("patient_id", id, "pga", value1, "crp", value2);
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("patient_id", id);
+        request.put("pga", value1);
+        request.put("crp", value2);
 
         AlertDialog progress = Static.showProgress(this);
-        try {
-            progress.show();
-            Response<Map<String, Object>> res =  RetrofitClient.getService().insertDiseaseScore(request);
-            if(res.isSuccessful()) {
-                Static.showResponse(this, "Data inserted successfully");
-            } else {
-                Static.showErrorResponse(this, res.errorBody());
-            }
-        } catch (Exception e) {
-            Static.showError(this, e.getMessage());
-        }
-        progress.dismiss();
+        progress.show();
+
+        RetrofitClient.getService()
+                .insertDiseaseScore(request)
+                .enqueue(new Callback<Map<String, Object>>() {
+                    @Override
+                    public void onResponse(Call<Map<String, Object>> call,
+                                           Response<Map<String, Object>> response) {
+                        progress.dismiss();
+
+                        if (response.isSuccessful()) {
+                            Static.showResponse(AssessmentActivity.this, response.body().get("message").toString());
+                        } else {
+                            Static.showErrorResponse(AssessmentActivity.this,
+                                    response.errorBody());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                        progress.dismiss();
+                        Static.showError(AssessmentActivity.this, t.getMessage());
+                    }
+                });
     }
+
 
 }
