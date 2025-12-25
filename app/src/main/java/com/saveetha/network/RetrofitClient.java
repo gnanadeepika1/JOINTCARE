@@ -15,7 +15,7 @@ public class RetrofitClient {
     /**
      *
      */
-    private static final String BASE_URL = "https://3cxr1p7f-80.inc1.devtunnels.ms/";
+    public static final String BASE_URL = "https://3cxr1p7f-80.inc1.devtunnels.ms/";
 
     private RetrofitClient() {
         // no instance
@@ -45,9 +45,9 @@ public class RetrofitClient {
     }
 
     public static ApiService getService() {
-        if(service==null) {
+//        if(service==null) {
             service = getInstance().create(ApiService.class);
-        }
+//        }
         return service;
     }
 }
