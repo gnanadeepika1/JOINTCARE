@@ -25,7 +25,7 @@
             android:src="@drawable/ic_arrow_back"
             android:tint="#000000" />
 
-        <!-- Title + Patient ID stacked vertically -->
+        <!-- Title + Patient ID -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,17 +52,53 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMedications"
+    <!-- CONTENT AREA (AI + MEDICATION LIST) -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="96dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:clipToPadding="false" />
+        android:orientation="vertical"
+        android:layout_marginTop="88dp">
 
-    <!-- Pink Floating Button -->
+        <!-- 🔹 AI Medication Recommendation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AI Medication Recommendation"
+                android:textStyle="bold"
+                android:textColor="#E65100"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tvAiSuggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AI suggestion will appear here"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:padding="12dp"
+                android:background="#FFF3E0"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"/>
+        </LinearLayout>
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMedications"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:clipToPadding="false" />
+    </LinearLayout>
+
+    <!-- Floating Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddMedication"
         android:layout_width="wrap_content"

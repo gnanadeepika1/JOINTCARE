@@ -25,68 +25,143 @@ import java.net.URL;
 public class DoctorSignupActivity extends AppCompatActivity {
 
     private ImageView backBtn;
-    private EditText etDoctorId, etFullName, etEmail, etPhone, etSpecialization, etPassword, etConfirmPassword;
+    private EditText etDoctorId, etFullName, etEmail, etPhone,
+            etSpecialization, etPassword, etConfirmPassword;
     private MaterialButton btnPatient;
 
-    private static final String PREFS_NAME         = "doctor_prefs";
-    private static final String KEY_DOCTOR_ID      = "doctor_id";
-    private static final String KEY_FULL_NAME      = "full_name";
-    private static final String KEY_EMAIL          = "email";
-    private static final String KEY_PHONE          = "phone";
+    private static final String PREFS_NAME = "doctor_prefs";
+    private static final String KEY_DOCTOR_ID = "doctor_id";
+    private static final String KEY_FULL_NAME = "full_name";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_PHONE = "phone";
     private static final String KEY_SPECIALIZATION = "specialization";
-    private static final String KEY_PASSWORD       = "password";
+    private static final String KEY_PASSWORD = "password";
 
-    private static final String SIGNUP_URL = RetrofitClient.BASE_URL+"jointcare/doctor_signup.php";
+    private static final String SIGNUP_URL =
+            RetrofitClient.BASE_URL + "jointcare/doctor_signup.php";
+
+    // 🔹 PASSWORD VALIDATION (same as login)
+    private static final String PASSWORD_PATTERN =
+            "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-={}\\[\\]:;\"'<>,.?/])" +
+                    "[A-Za-z\\d!@#$%^&*()_+\\-={}\\[\\]:;\"'<>,.?/]{6,10}$";
+
+    // 🔹 NAME: only letters and spaces
+    private static final String NAME_PATTERN = "^[A-Za-z ]+$";
+
+    // 🔹 EMAIL: letters + numbers + @gmail.com
+    private static final String EMAIL_PATTERN = "^[A-Za-z][A-Za-z0-9]*@gmail\\.com$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_signup);
 
-        backBtn          = findViewById(R.id.back_btn);
-        etDoctorId       = findViewById(R.id.etDoctorId);
-        etFullName       = findViewById(R.id.etFullName);
-        etEmail          = findViewById(R.id.etEmail);
-        etPhone          = findViewById(R.id.etPhone);
+        backBtn = findViewById(R.id.back_btn);
+        etDoctorId = findViewById(R.id.etDoctorId);
+        etFullName = findViewById(R.id.etFullName);
+        etEmail = findViewById(R.id.etEmail);
+        etPhone = findViewById(R.id.etPhone);
         etSpecialization = findViewById(R.id.etSpecialization);
-        etPassword       = findViewById(R.id.etPassword);
-        etConfirmPassword= findViewById(R.id.etConfirmPassword);
-        btnPatient       = findViewById(R.id.btnPatient);
+        etPassword = findViewById(R.id.etPassword);
+        etConfirmPassword = findViewById(R.id.etConfirmPassword);
+        btnPatient = findViewById(R.id.btnPatient);
 
         backBtn.setOnClickListener(v -> onBackPressed());
         btnPatient.setOnClickListener(v -> handleSubmit());
     }
 
     private void handleSubmit() {
-        String doctorId = etDoctorId.getText().toString().trim();
-        String name     = etFullName.getText().toString().trim();
-        String email    = etEmail.getText().toString().trim();
-        String phone    = etPhone.getText().toString().trim();
-        String spec     = etSpecialization.getText().toString().trim();
-        String pass     = etPassword.getText().toString();
-        String conf     = etConfirmPassword.getText().toString();
 
-        // Validation
-        if (TextUtils.isEmpty(doctorId)) { etDoctorId.setError("Doctor ID is required"); etDoctorId.requestFocus(); return; }
-        if (!doctorId.matches("(?i)^doc_\\d{4}$")) { etDoctorId.setError("Doctor ID must be like doc_1001"); etDoctorId.requestFocus(); return; }
-        if (TextUtils.isEmpty(name)) { etFullName.setError("Full name is required"); etFullName.requestFocus(); return; }
-        if (name.length() < 3) { etFullName.setError("Name must be at least 3 characters"); etFullName.requestFocus(); return; }
-        if (TextUtils.isEmpty(email)) { etEmail.setError("Email is required"); etEmail.requestFocus(); return; }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) { etEmail.setError("Enter a valid email"); etEmail.requestFocus(); return; }
-        if (TextUtils.isEmpty(phone)) { etPhone.setError("Phone number is required"); etPhone.requestFocus(); return; }
-        if (!phone.matches("\\d+")) { etPhone.setError("Phone number should contain only digits"); etPhone.requestFocus(); return; }
-        if (phone.length() < 10) { etPhone.setError("Phone number must be at least 10 digits"); etPhone.requestFocus(); return; }
-        if (TextUtils.isEmpty(spec)) { etSpecialization.setError("Specialization is required"); etSpecialization.requestFocus(); return; }
-        if (TextUtils.isEmpty(pass)) { etPassword.setError("Password is required"); etPassword.requestFocus(); return; }
-        if (pass.length() < 6) { etPassword.setError("Password must be at least 6 characters"); etPassword.requestFocus(); return; }
-        if (TextUtils.isEmpty(conf)) { etConfirmPassword.setError("Please confirm your password"); etConfirmPassword.requestFocus(); return; }
-        if (!pass.equals(conf)) { etConfirmPassword.setError("Passwords do not match"); etConfirmPassword.requestFocus(); Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show(); return; }
+        String doctorId = etDoctorId.getText().toString().trim();
+        String name = etFullName.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String spec = etSpecialization.getText().toString().trim();
+        String pass = etPassword.getText().toString();
+        String conf = etConfirmPassword.getText().toString();
+
+        // 🔹 Doctor ID
+        if (TextUtils.isEmpty(doctorId)) {
+            etDoctorId.setError("Doctor ID is required");
+            return;
+        }
+        if (!doctorId.matches("(?i)^doc_\\d{4}$")) {
+            etDoctorId.setError("Doctor ID must be like doc_1001");
+            return;
+        }
+
+        // 🔹 Name
+        if (TextUtils.isEmpty(name)) {
+            etFullName.setError("Full name is required");
+            return;
+        }
+        if (name.length() < 3) {
+            etFullName.setError("Name must be at least 3 characters");
+            return;
+        }
+        if (!name.matches(NAME_PATTERN)) {
+            etFullName.setError("Name should contain only letters and spaces");
+            return;
+        }
+
+        // 🔹 Email
+        if (TextUtils.isEmpty(email)) {
+            etEmail.setError("Email is required");
+            return;
+        }
+        if (!email.matches(EMAIL_PATTERN)) {
+            etEmail.setError("Email must be in format abc123@gmail.com");
+            return;
+        }
+
+        // 🔹 Phone
+        if (TextUtils.isEmpty(phone)) {
+            etPhone.setError("Phone number is required");
+            return;
+        }
+        if (!phone.matches("\\d{10}")) {
+            etPhone.setError("Phone number must be exactly 10 digits");
+            return;
+        }
+        if (phone.matches("(\\d)\\1{9}")) {
+            etPhone.setError("All digits cannot be the same");
+            return;
+        }
+
+        // 🔹 Specialization
+        if (TextUtils.isEmpty(spec)) {
+            etSpecialization.setError("Specialization is required");
+            return;
+        }
+
+        // 🔹 Password
+        if (TextUtils.isEmpty(pass)) {
+            etPassword.setError("Password is required");
+            return;
+        }
+        if (!pass.matches(PASSWORD_PATTERN)) {
+            etPassword.setError(
+                    "Password must be 6–10 chars with 1 capital, 1 digit & 1 special character"
+            );
+            return;
+        }
+
+        // 🔹 Confirm Password
+        if (TextUtils.isEmpty(conf)) {
+            etConfirmPassword.setError("Please confirm password");
+            return;
+        }
+        if (!pass.equals(conf)) {
+            etConfirmPassword.setError("Passwords do not match");
+            return;
+        }
 
         sendDataToServer(doctorId, name, email, phone, spec, pass);
     }
 
     private void sendDataToServer(String doctorId, String name, String email,
                                   String phone, String spec, String pass) {
+
         new Thread(() -> {
             HttpURLConnection conn = null;
             try {
@@ -101,74 +176,55 @@ public class DoctorSignupActivity extends AppCompatActivity {
                 URL url = new URL(SIGNUP_URL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setConnectTimeout(10000);
-                conn.setReadTimeout(10000);
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
                 OutputStream os = conn.getOutputStream();
                 os.write(body.toString().getBytes("UTF-8"));
-                os.flush();
                 os.close();
 
-                int responseCode = conn.getResponseCode();
                 BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(
-                                responseCode >= 200 && responseCode < 300
-                                        ? conn.getInputStream()
-                                        : conn.getErrorStream()
-                        )
-                );
+                        new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
+                while ((line = reader.readLine()) != null) sb.append(line);
                 reader.close();
 
-                JSONObject respJson = new JSONObject(sb.toString().trim());
-                boolean success     = respJson.optBoolean("success", false);
-                String message      = respJson.optString("message", "");
-                String serverDocId  = respJson.optString("doctor_id", doctorId);
+                JSONObject respJson = new JSONObject(sb.toString());
+                boolean success = respJson.optBoolean("success");
 
                 runOnUiThread(() -> {
                     if (success) {
-                        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(KEY_DOCTOR_ID, serverDocId);
-                        editor.putString(KEY_FULL_NAME, name);
-                        editor.putString(KEY_EMAIL, email);
-                        editor.putString(KEY_PHONE, phone);
-                        editor.putString(KEY_SPECIALIZATION, spec);
-                        editor.putString(KEY_PASSWORD, pass);
-                        editor.apply();
+                        SharedPreferences prefs =
+                                getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                        prefs.edit()
+                                .putString(KEY_DOCTOR_ID, doctorId)
+                                .putString(KEY_FULL_NAME, name)
+                                .putString(KEY_EMAIL, email)
+                                .putString(KEY_PHONE, phone)
+                                .putString(KEY_SPECIALIZATION, spec)
+                                .putString(KEY_PASSWORD, pass)
+                                .apply();
 
                         Toast.makeText(this,
-                                message.isEmpty() ? "Registration Successful!" : message,
+                                "Registration Successful!",
                                 Toast.LENGTH_SHORT).show();
 
-                        // Navigate to login with doctor_id
-                        Intent intent = new Intent(this, DoctorLoginActivity.class);
-                        intent.putExtra("doctor_id", serverDocId);
-
-                        // 🔹 Ensure login activity receives the new doctor_id
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                        startActivity(intent);
+                        startActivity(new Intent(this, DoctorLoginActivity.class)
+                                .putExtra("doctor_id", doctorId));
                         finish();
                     } else {
                         Toast.makeText(this,
-                                message.isEmpty() ? "Registration failed" : message,
+                                respJson.optString("message", "Registration failed"),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+
             } catch (Exception e) {
-                e.printStackTrace();
                 runOnUiThread(() ->
                         Toast.makeText(this,
-                                "Network/JSON error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show()
-                );
+                                "Error: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show());
             } finally {
                 if (conn != null) conn.disconnect();
             }

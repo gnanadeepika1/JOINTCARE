@@ -37,7 +37,7 @@ public class ComorbiditiesActivity extends AppCompatActivity {
 
     // Patient only READS comorbidities
     private static final String GET_COMORBIDITIES_URL =
-            "http://10.131.6.180/jointcare/get_comorbidities.php";
+            "https://3cxr1p7f-80.inc1.devtunnels.ms/jointcare/get_comorbidities.php";
     // If your PHP is actually under /myjoints/, then use:
     // "http://10.25.159.180/myjoints/get_comorbidities.php"
 

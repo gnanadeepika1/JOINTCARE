@@ -39,12 +39,10 @@ public class ConsultNowActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_ID = "patient_id";
 
     private static final String GET_DOCTORS_URL =
-            "http://10.131.6.180/jointcare/get_doctors.php";
+            "https://3cxr1p7f-80.inc1.devtunnels.ms/jointcare/get_doctors.php";
 
     private static final String ASSIGN_URL =
-            "http://10.131.6.180/jointcare/assign_doctor_to_patient.php";
-
-    private static final String TAG = "ConsultNow";
+            "https://3cxr1p7f-80.inc1.devtunnels.ms/jointcare/assign_doctor_to_patient.php";
 
     static class Doctor {
         final String emoji;
@@ -72,10 +70,10 @@ public class ConsultNowActivity extends AppCompatActivity {
 
         backBtn.setOnClickListener(v -> finish());
 
-        // ✅ FETCH DOCTORS FROM BACKEND
         fetchDoctors();
 
         btnSend.setOnClickListener(v -> {
+
             if (selectedDoctorId == null) {
                 Toast.makeText(this, "Please select a doctor", Toast.LENGTH_SHORT).show();
                 return;
@@ -99,15 +97,12 @@ public class ConsultNowActivity extends AppCompatActivity {
         });
     }
 
-    // 🔹 STEP 1: FETCH DOCTORS
     private void fetchDoctors() {
         new Thread(() -> {
             try {
                 URL url = new URL(GET_DOCTORS_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
-                conn.setConnectTimeout(10000);
-                conn.setReadTimeout(10000);
 
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(conn.getInputStream())
@@ -145,13 +140,14 @@ public class ConsultNowActivity extends AppCompatActivity {
         }).start();
     }
 
-    // 🔹 STEP 2: POPULATE UI
     private void populateDoctors(List<Doctor> doctors) {
         llDoctors.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
 
         for (Doctor d : doctors) {
-            View card = inflater.inflate(R.layout.item_doctor, llDoctors, false);
+
+            // ✅ FIXED LINE
+            View card = inflater.inflate(R.layout.item_consult_card, llDoctors, false);
 
             TextView tvEmoji = card.findViewById(R.id.tvEmoji);
             TextView tvDoctorName = card.findViewById(R.id.tvDoctorName);
@@ -178,7 +174,6 @@ public class ConsultNowActivity extends AppCompatActivity {
         }
     }
 
-    // 🔹 STEP 3: ASSIGN DOCTOR (UNCHANGED)
     private void assignDoctorToPatient(String patientId, String doctorId, String complaint) {
         new Thread(() -> {
             HttpURLConnection conn = null;
@@ -187,8 +182,6 @@ public class ConsultNowActivity extends AppCompatActivity {
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
-                conn.setConnectTimeout(15000);
-                conn.setReadTimeout(15000);
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
                 JSONObject body = new JSONObject();
@@ -198,7 +191,6 @@ public class ConsultNowActivity extends AppCompatActivity {
 
                 OutputStream os = conn.getOutputStream();
                 os.write(body.toString().getBytes("UTF-8"));
-                os.flush();
                 os.close();
 
                 BufferedReader br = new BufferedReader(

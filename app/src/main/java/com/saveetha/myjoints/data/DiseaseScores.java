@@ -21,11 +21,23 @@ public class DiseaseScores {
     }
 
     public static class Data {
+
         private int id;
         private Integer user_id;
         private String patient_id;
+
+        // ✅ RAW VALUES (ADDED – REQUIRED)
+        private int tjc;
+        private int sjc;
+        private float ea;
+
         private float pga;
         private float crp;
+
+        // ✅ CALCULATED VALUES (ADDED – REQUIRED)
+        private float sdai;
+        private double das28_crp;
+
         private String created_at;
 
         public int getId() {
@@ -40,6 +52,28 @@ public class DiseaseScores {
             return patient_id;
         }
 
+        // ✅ NEW GETTERS
+        public int getTjc() {
+            return tjc;
+        }
+
+        public int getSjc() {
+            return sjc;
+        }
+
+        public float getEa() {
+            return ea;
+        }
+
+        public float getSdai() {
+            return sdai;
+        }
+
+        public double getDas28_crp() {
+            return das28_crp;
+        }
+
+        // EXISTING GETTERS (UNCHANGED)
         public float getPga() {
             return pga;
         }
@@ -52,5 +86,4 @@ public class DiseaseScores {
             return created_at;
         }
     }
-
 }

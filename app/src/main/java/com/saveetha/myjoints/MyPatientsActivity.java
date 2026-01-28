@@ -28,7 +28,7 @@ import java.net.URL;
 public class MyPatientsActivity extends AppCompatActivity {
 
     private LinearLayout containerCards;
-    private ImageView btnBack, btnSettings, btnLogout;
+    private ImageView btnBack, btnLogout;
     private TextView tvDoctorHeaderName;   // title in header
     private TextView tvDoctorCardName;     // doctor card name
     private TextView tvDoctorCardEmail;    // doctor card email
@@ -38,10 +38,8 @@ public class MyPatientsActivity extends AppCompatActivity {
     private static final String KEY_DOCTOR_ID = "doctor_id";
 
     // PHP URLs
-    private static final String GET_DOCTOR_URL =
-            RetrofitClient.BASE_URL+"jointcare/get_doctor.php";
-    private static final String GET_PATIENTS_URL =
-            RetrofitClient.BASE_URL+"jointcare/get_patients.php";
+    private static final String GET_DOCTOR_URL = RetrofitClient.BASE_URL+"jointcare/get_doctor.php";
+    private static final String GET_PATIENTS_URL = RetrofitClient.BASE_URL+"jointcare/get_patients.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,24 +49,19 @@ public class MyPatientsActivity extends AppCompatActivity {
         // Views
         containerCards      = findViewById(R.id.containerCards);
         btnBack             = findViewById(R.id.btnBack);
-        btnSettings         = findViewById(R.id.btnSettings);
         btnLogout           = findViewById(R.id.btnLogout);
         tvDoctorHeaderName  = findViewById(R.id.tvDoctorHeaderName);
         tvDoctorCardName    = findViewById(R.id.tvDoctorCardName);
         tvDoctorCardEmail   = findViewById(R.id.tvDoctorCardEmail);
         tvPatientsTitle     = findViewById(R.id.tvPatientsTitle);
 
+        // BACK button
         btnBack.setOnClickListener(v -> onBackPressed());
 
-        btnSettings.setOnClickListener(v ->
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
-        );
-
+        // LOGOUT button
         btnLogout.setOnClickListener(v -> {
-            // Simple logout: clear prefs and go back to login
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().clear().apply();
-
             Intent i = new Intent(this, DoctorLoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
@@ -113,6 +106,7 @@ public class MyPatientsActivity extends AppCompatActivity {
                                 ? conn.getInputStream()
                                 : conn.getErrorStream()
                 ));
+
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = br.readLine()) != null) sb.append(line);
@@ -153,6 +147,7 @@ public class MyPatientsActivity extends AppCompatActivity {
                                     "Doctor fetch failed: " + err,
                                     Toast.LENGTH_LONG).show());
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->
@@ -188,7 +183,6 @@ public class MyPatientsActivity extends AppCompatActivity {
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
-                // Send doctor_id so backend can return only this doctor's patients
                 JSONObject body = new JSONObject();
                 body.put("doctor_id", doctorId);
 
@@ -203,6 +197,7 @@ public class MyPatientsActivity extends AppCompatActivity {
                                 ? conn.getInputStream()
                                 : conn.getErrorStream()
                 ));
+
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) sb.append(line);
@@ -237,7 +232,6 @@ public class MyPatientsActivity extends AppCompatActivity {
 
                     int count = patientsArr.length();
                     tvPatientsTitle.setText("My Patients (" + count + ")");
-
                     containerCards.removeAllViews();
                     LayoutInflater inflater = LayoutInflater.from(this);
 
@@ -250,10 +244,8 @@ public class MyPatientsActivity extends AppCompatActivity {
                         String email     = p.optString("email", "No email");
 
                         View card = inflater.inflate(R.layout.item_patient_card, containerCards, false);
-
                         TextView tvPatientName  = card.findViewById(R.id.tvPatientName);
                         TextView tvPatientEmail = card.findViewById(R.id.tvPatientEmail);
-                        // ivMessage & ivAction removed from layout, so no findViewById here
 
                         tvPatientName.setText(fullName);
                         tvPatientEmail.setText(email);

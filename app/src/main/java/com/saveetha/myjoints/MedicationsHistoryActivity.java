@@ -3,6 +3,7 @@ package com.saveetha.myjoints;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.saveetha.myjoints.util.AiMedicationAdvisor;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -31,19 +32,27 @@ import java.util.List;
 
 public class MedicationsHistoryActivity extends AppCompatActivity {
 
+    private static final String TAG = "MED_DEBUG";
+
     private ImageView backBtn;
     private RecyclerView rvMedications;
     private TextView tvPatientId;
     private FloatingActionButton fabAddMedication;
+    private TextView tvAiSuggestion;
 
     private final List<MedicationHistoryItem> items = new ArrayList<>();
     private MedicationHistoryAdapter adapter;
+
     private String patientId;
 
-    // Doctor uses SAME server & folder as patient
-    private static final String BASE_URL = "http://10.131.6.180/jointcare/";
-    private static final String GET_MEDICATIONS_URL = BASE_URL + "get_medications.php";
-    private static final String ADD_MEDICATION_URL  = BASE_URL + "add_medication.php";
+    private static final String BASE_URL =
+            "https://3cxr1p7f-80.inc1.devtunnels.ms/jointcare/";
+    private static final String GET_MEDICATIONS_URL =
+            BASE_URL + "get_medications.php";
+    private static final String ADD_MEDICATION_URL =
+            BASE_URL + "add_medication.php";
+    private static final String GET_GRAPH_URL =
+            BASE_URL + "get_graph.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,69 +63,67 @@ public class MedicationsHistoryActivity extends AppCompatActivity {
         rvMedications = findViewById(R.id.rvMedications);
         tvPatientId = findViewById(R.id.tvPatientId);
         fabAddMedication = findViewById(R.id.fabAddMedication);
+        tvAiSuggestion = findViewById(R.id.tvAiSuggestion);
 
         backBtn.setOnClickListener(v -> onBackPressed());
 
-        // Receive patient ID from MedicalRecordsActivity
         Intent intent = getIntent();
-        patientId = (intent != null) ? intent.getStringExtra("patient_id") : null;
+        patientId = intent != null ? intent.getStringExtra("patient_id") : null;
 
-        if (!TextUtils.isEmpty(patientId)) {
-            tvPatientId.setText("Patient ID: " + patientId);
-        } else {
-            tvPatientId.setText("Patient ID: -");
+        if (TextUtils.isEmpty(patientId)) {
             Toast.makeText(this, "No patient ID provided", Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
+
+        patientId = patientId.toLowerCase().trim();
+
+        if (!patientId.matches("^pat_\\d{4}$")) {
+            Toast.makeText(this, "Invalid patient ID: " + patientId, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        tvPatientId.setText("Patient ID: " + patientId);
+        Log.d(TAG, "Using patientId = " + patientId);
 
         adapter = new MedicationHistoryAdapter(items);
         rvMedications.setLayoutManager(new LinearLayoutManager(this));
         rvMedications.setAdapter(adapter);
 
-        // Load meds from server
         loadMedicationsFromServer();
+        loadLatestScoresAndRunAI();
 
-        // Add (+) button opens dialog
         fabAddMedication.setOnClickListener(v -> showAddMedicationDialog());
     }
 
-    // ================================================================
+    // =====================================================
     // ADD MEDICATION DIALOG
-    // ================================================================
+    // =====================================================
     private void showAddMedicationDialog() {
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_medication, null);
+        View view = getLayoutInflater().inflate(R.layout.dialog_add_medication, null);
 
-        EditText etName   = dialogView.findViewById(R.id.etMedicationName);
-        EditText etDose   = dialogView.findViewById(R.id.etDose);
-        EditText etPeriod = dialogView.findViewById(R.id.etPeriod);
-        TextView tvAddAnother = dialogView.findViewById(R.id.tvAddAnotherMedication);
+        EditText etName = view.findViewById(R.id.etMedicationName);
+        EditText etDose = view.findViewById(R.id.etDose);
+        EditText etPeriod = view.findViewById(R.id.etPeriod);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dialogView)
+                .setView(view)
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Add", null)   // we override click below
+                .setPositiveButton("Add", null)
                 .create();
-
-        tvAddAnother.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Add-another feature coming soon!",
-                        Toast.LENGTH_SHORT).show()
-        );
 
         dialog.setOnShowListener(d -> {
             Button btnAdd = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             btnAdd.setOnClickListener(v -> {
-                String name   = etName.getText().toString().trim();
-                String dose   = etDose.getText().toString().trim();
+                String name = etName.getText().toString().trim();
+                String dose = etDose.getText().toString().trim();
                 String period = etPeriod.getText().toString().trim();
 
                 if (name.isEmpty()) {
-                    etName.setError("Enter name");
-                    etName.requestFocus();
+                    etName.setError("Enter medication name");
                     return;
                 }
-
-                if (dose.isEmpty())   dose = "-";
-                if (period.isEmpty()) period = "-";
 
                 addMedicationToServer(name, dose, period);
                 dialog.dismiss();
@@ -126,23 +133,18 @@ public class MedicationsHistoryActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // ================================================================
-    // SEND MEDICATION TO SERVER
-    // ================================================================
+    // =====================================================
+    // ADD MEDICATION (REAL SERVER RESPONSE)
+    // =====================================================
     private void addMedicationToServer(String name, String dose, String period) {
-        if (TextUtils.isEmpty(patientId)) {
-            Toast.makeText(this, "Missing patient ID", Toast.LENGTH_LONG).show();
-            return;
-        }
-
         new Thread(() -> {
             HttpURLConnection conn = null;
             try {
                 URL url = new URL(ADD_MEDICATION_URL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conn.setDoOutput(true);
 
                 JSONObject body = new JSONObject();
                 body.put("patient_id", patientId);
@@ -152,101 +154,137 @@ public class MedicationsHistoryActivity extends AppCompatActivity {
 
                 OutputStream os = conn.getOutputStream();
                 os.write(body.toString().getBytes("UTF-8"));
-                os.flush();
                 os.close();
 
-                InputStream is = (conn.getResponseCode() < 400)
-                        ? conn.getInputStream()
-                        : conn.getErrorStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                conn.getResponseCode() < 400
+                                        ? conn.getInputStream()
+                                        : conn.getErrorStream()
+                        )
+                );
+
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = br.readLine()) != null) sb.append(line);
+                br.close();
 
-                JSONObject response = new JSONObject(sb.toString());
+                JSONObject res = new JSONObject(sb.toString());
+                boolean success = res.optBoolean("success", false);
+                String message = res.optString("message");
 
                 runOnUiThread(() -> {
-                    if (response.optBoolean("success")) {
+                    if (success) {
                         Toast.makeText(this, "Medication added", Toast.LENGTH_SHORT).show();
                         loadMedicationsFromServer();
                     } else {
-                        Toast.makeText(this,
-                                response.optString("message", "Failed to add medication"),
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                     }
                 });
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "Add medication error", e);
                 runOnUiThread(() ->
-                        Toast.makeText(this,
-                                "Error adding medication",
-                                Toast.LENGTH_LONG).show());
+                        Toast.makeText(this, "Server error", Toast.LENGTH_LONG).show()
+                );
             } finally {
                 if (conn != null) conn.disconnect();
             }
         }).start();
     }
 
-    // ================================================================
-    // LOAD MEDICATIONS FROM SERVER
-    // ================================================================
+    // =====================================================
+    // LOAD MEDICATIONS
+    // =====================================================
     private void loadMedicationsFromServer() {
-        if (TextUtils.isEmpty(patientId)) return;
-
         new Thread(() -> {
             HttpURLConnection conn = null;
             try {
                 URL url = new URL(GET_MEDICATIONS_URL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conn.setDoOutput(true);
 
                 JSONObject body = new JSONObject();
                 body.put("patient_id", patientId);
 
                 OutputStream os = conn.getOutputStream();
                 os.write(body.toString().getBytes("UTF-8"));
-                os.flush();
                 os.close();
 
-                InputStream is = (conn.getResponseCode() < 400)
-                        ? conn.getInputStream()
-                        : conn.getErrorStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream())
+                );
+
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = br.readLine()) != null) sb.append(line);
+                br.close();
 
-                JSONObject response = new JSONObject(sb.toString());
+                JSONObject json = new JSONObject(sb.toString());
+                JSONArray arr = json.getJSONArray("medications");
 
-                if (response.optBoolean("success")) {
-                    JSONArray arr = response.getJSONArray("medications");
-                    items.clear();
-                    for (int i = 0; i < arr.length(); i++) {
-                        JSONObject m = arr.getJSONObject(i);
-                        String name   = m.optString("name");
-                        String dose   = m.optString("dose");
-                        String period = m.optString("period");
-                        items.add(new MedicationHistoryItem(name, dose, period));
-                    }
-                    runOnUiThread(() -> adapter.notifyDataSetChanged());
-                } else {
-                    String msg = response.optString("message", "Failed to load medications");
-                    runOnUiThread(() ->
-                            Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-                    );
+                items.clear();
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject m = arr.getJSONObject(i);
+                    items.add(new MedicationHistoryItem(
+                            m.getString("name"),
+                            m.getString("dose"),
+                            m.getString("period")
+                    ));
                 }
 
+                runOnUiThread(() -> adapter.notifyDataSetChanged());
+
             } catch (Exception e) {
-                e.printStackTrace();
-                runOnUiThread(() ->
-                        Toast.makeText(this,
-                                "Error loading medications",
-                                Toast.LENGTH_LONG).show());
+                Log.e(TAG, "Load medications error", e);
             } finally {
                 if (conn != null) conn.disconnect();
+            }
+        }).start();
+    }
+
+    // =====================================================
+    // AI SUGGESTION
+    // =====================================================
+    private void loadLatestScoresAndRunAI() {
+        new Thread(() -> {
+            try {
+                URL url = new URL(GET_GRAPH_URL + "?patient_id=" + patientId);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream())
+                );
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) sb.append(line);
+                br.close();
+
+                JSONObject json = new JSONObject(sb.toString());
+                JSONArray arr = json.getJSONArray("data");
+                if (arr.length() == 0) return;
+
+                JSONObject last = arr.getJSONObject(arr.length() - 1);
+                double sdai = last.getDouble("sdai");
+                double das28 = last.getDouble("das28_crp");
+
+                String suggestion =
+                        AiMedicationAdvisor.getSuggestion(sdai, das28);
+
+                runOnUiThread(() ->
+                        tvAiSuggestion.setText(
+                                "🧠 AI Assessment\n" +
+                                        "SDAI: " + sdai +
+                                        " | DAS28: " + das28 +
+                                        "\n💡 " + suggestion
+                        )
+                );
+
+            } catch (Exception e) {
+                Log.e(TAG, "AI load error", e);
             }
         }).start();
     }

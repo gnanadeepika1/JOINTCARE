@@ -12,7 +12,8 @@ import com.saveetha.myjoints.databinding.ItemDiseaseScoreBinding;
 
 import java.util.List;
 
-public class DiseaseScoreAdapter extends RecyclerView.Adapter<DiseaseScoreAdapter.ViewHolder> {
+public class DiseaseScoreAdapter
+        extends RecyclerView.Adapter<DiseaseScoreAdapter.ViewHolder> {
 
     private final List<DiseaseScores.Data> list;
 
@@ -32,22 +33,30 @@ public class DiseaseScoreAdapter extends RecyclerView.Adapter<DiseaseScoreAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemDiseaseScoreBinding binding = ItemDiseaseScoreBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
+        ItemDiseaseScoreBinding binding =
+                ItemDiseaseScoreBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                );
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         DiseaseScores.Data item = list.get(position);
 
         holder.binding.ivDelete.setVisibility(View.INVISIBLE);
-        holder.binding.tvSdai.setText("SDAI: " + item.getPga());
-        holder.binding.tvDas.setText("DAS28-CRP: " + item.getCrp());
+
+        // ✅ CORRECT VALUES (FIXED)
+        holder.binding.tvSdai.setText("SDAI: " + item.getSdai());
+        holder.binding.tvDas.setText("DAS28-CRP: " + item.getDas28_crp());
+
         holder.binding.tvDate.setText("Date: " + item.getCreated_at());
 
         holder.binding.ivDelete.setOnClickListener(v -> {
-
+            // delete handled elsewhere
         });
     }
 
@@ -64,6 +73,4 @@ public class DiseaseScoreAdapter extends RecyclerView.Adapter<DiseaseScoreAdapte
             this.binding = binding;
         }
     }
-
 }
-

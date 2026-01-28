@@ -44,8 +44,8 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
     private MaterialButton btnSave;
     private LineChart lineChart;
     private ImageView backBtn;
-    PainEntryAdapter adapter;
 
+    PainEntryAdapter adapter;
     private final List<PainEntry> entries = new ArrayList<>();
 
     private ActivityDailyPainBinding binding;
@@ -75,7 +75,6 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
     }
 
     private void getGraph(String patientID) {
-
         AlertDialog progress = Static.showProgress(this);
         progress.show();
 
@@ -83,37 +82,47 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
                 .getPainValues(patientID)
                 .enqueue(new Callback<>() {
                     @Override
-                    public void onResponse(Call<PainResponse> call, Response<PainResponse> response) {
+                    public void onResponse(Call<PainResponse> call,
+                                           Response<PainResponse> response) {
                         progress.dismiss();
 
                         if (response.isSuccessful()) {
-                            if (response.body().getData()!=null && !response.body().getData().isEmpty()) {
-                                List<PainEntry> data = response.body().getData();
+                            if (response.body().getData() != null
+                                    && !response.body().getData().isEmpty()) {
 
+                                List<PainEntry> data = response.body().getData();
                                 entries.addAll(data);
                                 setupChart();
 
-                                 adapter = new PainEntryAdapter(data);
-                                binding.rvEntries.setLayoutManager(new LinearLayoutManager(DailySelfAssessmentActivity.this));
+                                adapter = new PainEntryAdapter(data);
+                                binding.rvEntries.setLayoutManager(
+                                        new LinearLayoutManager(
+                                                DailySelfAssessmentActivity.this));
                                 binding.rvEntries.setAdapter(adapter);
+
                             } else {
-                                Static.toast(DailySelfAssessmentActivity.this, "No Patient Records Found");
+                                Static.toast(
+                                        DailySelfAssessmentActivity.this,
+                                        "No Patient Records Found");
                             }
                         } else {
-                            Static.showErrorResponse(DailySelfAssessmentActivity.this, response.errorBody());
+                            Static.showErrorResponse(
+                                    DailySelfAssessmentActivity.this,
+                                    response.errorBody());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<PainResponse> call, Throwable t) {
                         progress.dismiss();
-                        Static.showError(DailySelfAssessmentActivity.this, t.getMessage());
+                        Static.showError(
+                                DailySelfAssessmentActivity.this,
+                                t.getMessage());
                     }
                 });
     }
 
     private void saveValue(String id, int value1) {
-
         Map<String, Object> request = new HashMap<>();
         request.put("user_id", id);
         request.put("pain_value", value1);
@@ -128,16 +137,22 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
                     public void onResponse(Call<Map<String, Object>> call,
                                            Response<Map<String, Object>> response) {
                         progress.dismiss();
+
                         if (response.isSuccessful()) {
                             String iso = nowIso();
                             entries.add(0, new PainEntry(value1, iso));
-                            if(adapter!=null) {
+
+                            if (adapter != null) {
                                 adapter.notifyDataSetChanged();
                             }
+
                             updateChart();
-                            Static.showResponse(DailySelfAssessmentActivity.this, response.body().get("message").toString());
+                            Static.showResponse(
+                                    DailySelfAssessmentActivity.this,
+                                    response.body().get("message").toString());
                         } else {
-                            Static.showErrorResponse(DailySelfAssessmentActivity.this,
+                            Static.showErrorResponse(
+                                    DailySelfAssessmentActivity.this,
                                     response.errorBody());
                         }
                     }
@@ -145,7 +160,9 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<Map<String, Object>> call, Throwable t) {
                         progress.dismiss();
-                        Static.showError(DailySelfAssessmentActivity.this, t.getMessage());
+                        Static.showError(
+                                DailySelfAssessmentActivity.this,
+                                t.getMessage());
                     }
                 });
     }
@@ -173,8 +190,8 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
 
     private void updateChart() {
         List<Entry> chartEntries = new ArrayList<>();
-
         int N = Math.min(entries.size(), 12);
+
         if (N == 0) {
             chartEntries.add(new Entry(0f, 0f));
         } else {
@@ -189,9 +206,9 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
         set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         set.setDrawValues(false);
         set.setLineWidth(2.2f);
-        set.setColor(0xFFE85C7B);      // Pink line
+        set.setColor(0xFFE85C7B);
         set.setDrawFilled(true);
-        set.setFillColor(0xFFF8D8E5);  // Light pink fill
+        set.setFillColor(0xFFF8D8E5);
         set.setFillAlpha(200);
         set.setCircleColor(0xFFE85C7B);
         set.setCircleRadius(4f);
@@ -203,9 +220,10 @@ public class DailySelfAssessmentActivity extends AppCompatActivity {
     }
 
     private String nowIso() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        SimpleDateFormat sdf =
+                new SimpleDateFormat(
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(new Date());
     }
-
 }

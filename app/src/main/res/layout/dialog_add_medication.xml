@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapWords"
-        android:hint=""
         android:layout_marginBottom="12dp" />
 
     <TextView
@@ -43,7 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint=""
         android:layout_marginBottom="12dp" />
 
     <TextView
@@ -58,16 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint=""
         android:layout_marginBottom="16dp" />
 
-    <!-- “+ Add Another Medication” text -->
-    <TextView
-        android:id="@+id/tvAddAnotherMedication"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+  Add Another Medication"
-        android:textSize="14sp"
-        android:textColor="#1565C0"
-        android:layout_marginBottom="8dp" />
 </LinearLayout>

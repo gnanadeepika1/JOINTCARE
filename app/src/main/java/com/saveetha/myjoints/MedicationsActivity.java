@@ -28,7 +28,7 @@ public class MedicationsActivity extends AppCompatActivity {
     private static final String KEY_PATIENT_ID = "patient_id";
 
     // ✅ SAME server & folder as doctor
-    private static final String BASE_URL            = "http://10.131.6.180/jointcare/";
+    private static final String BASE_URL            = "https://3cxr1p7f-80.inc1.devtunnels.ms//jointcare/";
     private static final String GET_MEDICATIONS_URL = BASE_URL + "get_medications.php";
 
     private RecyclerView rvMedications;

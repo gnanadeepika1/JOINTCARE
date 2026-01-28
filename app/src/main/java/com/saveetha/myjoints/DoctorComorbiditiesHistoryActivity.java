@@ -37,9 +37,9 @@ public class DoctorComorbiditiesHistoryActivity extends AppCompatActivity {
     private TextView tvPatientId;
 
     private static final String GET_COMORBIDITIES_URL =
-            "http://10.131.6.180/jointcare/get_comorbidities.php";
+            "https://3cxr1p7f-80.inc1.devtunnels.ms/jointcare/get_comorbidities.php";
     private static final String ADD_COMORBIDITY_URL =
-            "http://10.131.6.180/jointcare/add_comorbidity.php";
+            "https://3cxr1p7f-80.inc1.devtunnels.ms/jointcare/add_comorbidity.php";
 
     private static final String PREFS_NAME_DOCTOR = "doctor_prefs";
     private static final String KEY_DOCTOR_ID     = "doctor_id";

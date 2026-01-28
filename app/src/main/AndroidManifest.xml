@@ -14,21 +14,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyJoints"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".JointsSelectActivity"
             android:exported="true" >
-
         </activity>
+
         <!-- 🚀 Launcher Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Patient & Doctor Related Activities -->
+        </activity>
+
+        <!-- Patient & Doctor Related Activities -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -49,7 +51,9 @@
             android:exported="false" />
         <activity
             android:name=".DoctorHomeActivity"
-            android:exported="false" /> <!-- App Functional Screens -->
+            android:exported="false" />
+
+        <!-- App Functional Screens -->
         <activity
             android:name=".ComplaintsActivity"
             android:exported="false" />
@@ -76,7 +80,9 @@
             android:exported="false" />
         <activity
             android:name=".ConsultNowActivity"
-            android:exported="false" /> <!-- History Screens -->
+            android:exported="false" />
+
+        <!-- History Screens -->
         <activity
             android:name=".MedicalRecordsActivity"
             android:exported="false" />
@@ -97,27 +103,40 @@
             android:exported="false" />
         <activity
             android:name=".ReferralHistoryActivity"
-            android:exported="false" /> <!-- Disease Scores -->
+            android:exported="false" />
+
+        <!-- Disease Scores -->
         <activity
             android:name=".DiseaseScoresActivity"
             android:exported="true">
+        </activity>
 
-        </activity> <!-- ✅ NEW: Tender Joints Screen -->
+        <!-- ✅ Tender Joints Screen -->
         <activity
             android:name=".TenderJointsActivity"
-            android:exported="false" />
+            android:exported="true">
+            <!-- removed launcher intent -->
+        </activity>
+
+        <!-- ✅ Swollen Joints Screen (NOW Launcher) -->
         <activity
             android:name=".SwollenJointsActivity"
-            android:exported="false" />
+            android:exported="true">
+
+        </activity>
+
         <activity
             android:name=".AssessmentActivity"
-            android:exported="false" /> <!-- Misc -->
+            android:exported="false" />
+
+        <!-- Misc -->
         <activity
             android:name=".MyPatientsActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
-    </application>
+        <activity android:name=".ForgotPasswordActivity" />
 
+    </application>
 </manifest>

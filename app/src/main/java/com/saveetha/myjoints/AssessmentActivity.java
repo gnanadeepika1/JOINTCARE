@@ -1,16 +1,13 @@
 package com.saveetha.myjoints;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -19,35 +16,26 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.saveetha.myjoints.databinding.ActivityAssessmentBinding;
 import com.saveetha.myjoints.util.Static;
-import com.saveetha.network.ApiService;
 import com.saveetha.network.RetrofitClient;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Map;
+
 public class AssessmentActivity extends AppCompatActivity {
 
     ActivityAssessmentBinding binding;
-    private static final String PREFS_NAME    = "doctor_prefs";
-    private static final String KEY_DOCTOR_ID = "doctor_id";
-    private SharedPreferences prefs;
 
-    float seek1;
-    float seek2;
+    float pga = 0f;
+    float ea = 0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAssessmentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         ImageView btnBack = findViewById(R.id.btnBack);
         SeekBar seekPatient = findViewById(R.id.seekPatient);
@@ -58,13 +46,14 @@ public class AssessmentActivity extends AppCompatActivity {
         Button btnCalculate = findViewById(R.id.btnCalculate);
 
         btnBack.setOnClickListener(v -> finish());
+
         float maxValue = 10.0f;
+
         seekPatient.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float value = (progress / 100f) * maxValue;
-                seek1 = value;
-                tvPatientValue.setText(String.format("Value: %.1f", value));
+                pga = (progress / 100f) * maxValue;
+                tvPatientValue.setText(String.format("Value: %.1f", pga));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -73,66 +62,76 @@ public class AssessmentActivity extends AppCompatActivity {
         seekEvaluator.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float value = (progress / 100f) * maxValue;
-                seek2 = value;
-                tvEvaluatorValue.setText(String.format("Value: %.1f", value));
+                ea = (progress / 100f) * maxValue;
+                tvEvaluatorValue.setText(String.format("Value: %.1f", ea));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root, (v, insets) -> {
+        Intent intent = getIntent();
+        int tjc = intent.getIntExtra("TJC", 0);
+        int sjc = intent.getIntExtra("SJC", 0);
+        String patientId = intent.getStringExtra("patient_id");
+
+        btnCalculate.setOnClickListener(v -> {
+
+            String crpStr = edtCrp.getText().toString().trim();
+
+            if (crpStr.isEmpty()) {
+                Static.toast(AssessmentActivity.this, "Enter CRP value");
+                return;
+            }
+
+            float crp = Float.parseFloat(crpStr);
+
+            saveValue(patientId, tjc, sjc, pga, ea, crp);
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(
-                    systemBars.left,
-                    systemBars.top,
-                    systemBars.right,
-                    systemBars.bottom
-            );
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        Intent tenderJointValue = getIntent();
-        int tenderJoint = tenderJointValue.getIntExtra("tenderJointSelectionCount", 0);
-        int swollenJoint = tenderJointValue.getIntExtra("swollenJointSelectionCount", 0);
-        String patientId = tenderJointValue.getStringExtra("patient_id");
-        AtomicReference<String> crp = new AtomicReference<>("");
-        btnCalculate.setOnClickListener(v -> {
-            String crpstr = edtCrp.getText().toString().trim();
-             crp.set(crpstr);
-             if(crpstr.isEmpty()) {
-                 Static.toast(AssessmentActivity.this, "Enter crp");
-                 return;
-             }
-            // Calculation logic can be added here later
-            saveValue(patientId, tenderJoint, crp.get());
-        });
-
     }
 
-    private void saveValue(String id, float value1, String value2) {
-
-        Map<String, Object> request = new HashMap<>();
-        request.put("patient_id", id);
-        request.put("pga", value1);
-        request.put("crp", value2);
+    // ================= FIXED API CALL =================
+    private void saveValue(String patientId, int tjc, int sjc, float pga, float ea, float crp) {
 
         AlertDialog progress = Static.showProgress(this);
         progress.show();
 
         RetrofitClient.getService()
-                .insertDiseaseScore(request)
+                .insertDiseaseScore(patientId, tjc, sjc, pga, ea, crp)
                 .enqueue(new Callback<Map<String, Object>>() {
+
                     @Override
                     public void onResponse(Call<Map<String, Object>> call,
                                            Response<Map<String, Object>> response) {
                         progress.dismiss();
 
-                        if (response.isSuccessful()) {
-                            Static.showResponse(AssessmentActivity.this, response.body().get("message").toString());
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            new AlertDialog.Builder(AssessmentActivity.this)
+                                    .setTitle("Success")
+                                    .setMessage(response.body().get("message").toString())
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", (dialog, which) -> {
+                                        Intent i = new Intent(
+                                                AssessmentActivity.this,
+                                                MedicalRecordsActivity.class
+                                        );
+                                        i.putExtra("patient_id", patientId);
+                                        startActivity(i);
+                                        finish();
+                                    })
+                                    .show();
+
                         } else {
-                            Static.showErrorResponse(AssessmentActivity.this,
-                                    response.errorBody());
+                            Static.showErrorResponse(
+                                    AssessmentActivity.this,
+                                    response.errorBody()
+                            );
                         }
                     }
 
@@ -143,5 +142,4 @@ public class AssessmentActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
