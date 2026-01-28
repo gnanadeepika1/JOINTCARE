@@ -164,7 +164,11 @@ public class TreatmentsHistoryActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
-                Log.e(TAG, "ADD ERROR", e);
+                runOnUiThread(() -> {
+                    Toast.makeText(this,
+                            "Error "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                    loadTreatmentsFromServer();
+                });
             }
         }).start();
     }
